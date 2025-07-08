@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villa Pet | Marcações</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png">
+    <link rel="stylesheet" href="./style.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src ="./script.js" defer></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/locales/pt.js'></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css' rel='stylesheet' />
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showSidebar()"><ion-icon name="menu-outline" class="menu"></ion-icon></a>
+        <a href="#" onclick="hideSidebar()"><ion-icon name="close-outline" class="close"></ion-icon></a>
+        <img src="./img/VillaPetLogo.png" class="logo">
+        <div class="container">
+            <ul>
+                <li><a href="./index.html">Inicio</a></li>
+                <li><a href="#" style="color: red">Marcações</a></li>
+                <li><a href="./contactos.html">Contactos</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <section class="marcacoes">
+            <h2>Faça uma Marcação</h2>
+
+            <!-- Seleção de serviços -->
+            <label for="service-select">Selecione um Serviço:</label>
+            <select id="service-select" required>
+                <option value="">-- Escolha um serviço --</option>
+                <option value="Banho">Banho</option>
+                <option value="Creche">Creche</option>
+                <option value="Treino">Treino</option>
+                <option value="Tosquia">Tosquia</option>
+                <option value="Spa">Spa</option>
+                <option value="Estadia">Estadia</option>
+            </select>
+
+            <div id="calendar"></div>
+            <p id="hora-escolhida" style="font-weight: bold;"></p>
+            <form id="booking-form" style="display: none;">
+                <input type="hidden" id="selected-date">
+                <label for="nome-pai-mae">Nome do Pai/Mãe:</label>
+                <input type="text" id="nome-pai-mae" required>
+
+                <label for="nome-animal">Nome do Animal:</label>
+                <input type="text" id="nome-animal" required>
+        
+                <label for="tipo-animal">Tipo de Animal:</label>
+                <select id="tipo-animal" required>
+                    <option value="cão">Cão</option>
+                    <option value="gato">Gato</option>
+                </select>
+        
+                <label for="raca">Raça:</label>
+                <input type="text" id="raca" required>
+        
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" required>
+                    <option value="macho">Macho</option>
+                    <option value="fêmea">Fêmea</option>
+                </select>
+        
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+        
+                <label for="telefone">Número de Telemóvel:</label>
+                <input type="tel" id="telefone" required>
+        
+                <label for="alerta">Alerta sobre o Animal (opcional):</label>
+                <textarea id="alerta"></textarea>
+        
+                <button type="submit">Marcar</button>
+            </form>
+
+        </section>
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Sobre Nós</h3>
+                <p>Na Villa Pet, cuidamos do seu melhor amigo com amor e dedicação. Descubra nossos serviços e faça parte da nossa comunidade!</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contactos</h3>
+                <p>Email: contato@villapet.com</p>
+                <p>Telefone: +351 912 345 678</p>
+            </div>
+            <div class="footer-section">
+                <h3>Siga-nos</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </a>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </a>
+                    <a href="https://www.twitter.com/" target="_blank" rel="noopener noreferrer">
+                        <ion-icon name="logo-twitter"></ion-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Villa Pet. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,455 @@
+/* Reset básico */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f9f9f9; /* Fundo claro para todo o site */
+    color: #333; /* Cor do texto */
+}
+
+.logo {
+    max-height: 60px; /* Altura máxima para a logo */
+    padding: 10px;
+    margin: 5px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Navegação */
+nav {
+    background: #940000;
+    width: 100%;
+    height: 80px;
+    position: relative; /* Para o z-index funcionar */
+    z-index: 10; /* Garante que a navbar esteja acima de outros elementos */
+    transition: background 0.3s ease, height 0.3s ease; /* Adiciona transição ao fundo e altura */
+}
+
+.container {
+    height: auto; /* Ajuste conforme necessário */
+    background: #940000;
+    top: 80px; /* Ajuste para logo abaixo da navbar */
+    position: fixed; /* Certifique-se de que é fixed */
+    display: none; /* Continua escondido até ser ativado */
+    z-index: 20; /* Garante que o menu esteja acima de outros elementos */
+}
+
+ul {
+    width: 100%;
+}
+
+ul li {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+ul li a {
+    color: white;
+    padding: 15px;
+    font-size: 1.2em; /* Usando unidade relativa */
+    transition: background 0.5s;
+}
+
+.container li:hover {
+    background: red;
+}
+
+.menu {
+    position: absolute;
+    font-size: 3em; /* Tamanho maior em unidades relativas */
+    padding: 3px;
+    margin: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    display: flex;
+}
+
+.close {
+    position: absolute;
+    font-size: 3em; /* Tamanho maior em unidades relativas */
+    padding: 3px;
+    margin: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    display: none;
+}
+
+.menu:hover,
+.close:hover {
+    color: red;
+    transition: 0.9s;
+}
+
+/* Títulos de Seção */
+.section-title {
+    text-align: center;
+    margin: 40px 0;
+    font-size: 2.5rem;
+    color: #940000; /* Cor da seção */
+}
+
+/* Slider */
+.slider {
+    position: relative;
+    max-width: 650px; /* Tamanho máximo do slider */
+    margin: 40px auto; /* Margem superior/inferior de 40px e centraliza horizontalmente */
+    overflow: hidden; /* Esconde imagens fora do contêiner */
+}
+
+.image-container {
+    position: relative; /* Para controle de posição dos filhos */
+    width: 100%; /* 100% do contêiner do slider */
+}
+
+.image-container img {
+    width: 100%; /* Faz com que a imagem preencha o contêiner */
+    height: auto; /* Mantém a proporção */
+    display: none; /* Esconde todas as imagens inicialmente */
+    transition: opacity 1s ease; /* Transição mais suave para a opacidade */
+}
+
+.image-container img.active {
+    display: block; /* Mostra apenas a imagem ativa */
+    opacity: 1; /* Totalmente visível */
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Seção "Quem Somos" */
+.quem-somos {
+    text-align: center;
+    padding: 40px;
+    background: #ffffff; /* Fundo claro para destacar a seção */
+}
+
+.servicos {
+    background-color: rgb(240, 239, 239);
+}
+
+/* Título dos Serviços */
+.titulos {
+    display: flex; /* Ativa o flexbox */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente se necessário */
+}
+
+.titulos h2 {
+    text-align: center; /* Centraliza o texto */
+    font-size: 2em; /* Tamanho da fonte */
+    color: #940000; /* Cor do texto */
+    padding: 5px;
+}
+
+/* Serviços em Destaque */
+.servicos-destaque {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os cartões se ajustem */
+    justify-content: center; /* Centraliza os cartões */
+    gap: 20px; /* Espaçamento entre os cartões */
+    padding: 40px; /* Margem acima e abaixo */
+}
+
+.servico-card {
+    position: relative; /* Para posicionar o conteúdo dentro do card */
+    background-size: cover; /* Faz a imagem cobrir todo o card */
+    background-position: center; /* Centraliza a imagem de fundo */
+    color: white; /* Cor do texto */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 8px; /* Bordas arredondadas */
+    margin-bottom: 20px; /* Espaçamento entre os cartões */
+    height: 200px; /* Altura fixa para os cartões */
+    display: flex; /* Para usar flexbox */
+    align-items: flex-end; /* Alinha o texto ao fundo */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* Sombra no texto para melhor legibilidade */
+    overflow: hidden; /* Esconde o que ultrapassa o card */
+}
+
+.servico-content {
+    position: relative; /* Para posicionar o conteúdo */
+    z-index: 1; /* Coloca o conteúdo acima da imagem de fundo */
+    padding: 10px; /* Espaçamento interno do conteúdo */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para o conteúdo */
+    border-radius: 8px; /* Bordas arredondadas para o fundo do conteúdo */
+}
+
+.servico-card:hover {
+    transform: scale(1.05); /* Aumenta o cartão ao passar o mouse */
+}
+
+/* Seção de Parcerias */
+.parcerias {
+    background-color: rgb(255, 255, 255);
+}
+
+.parceiros {
+    padding: 40px;
+    text-align: center; /* Centraliza o texto */
+}
+
+.parceiros ul {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens se ajustem */
+    justify-content: center; /* Centraliza os itens */
+    gap: 30px; /* Espaçamento entre os ícones */
+    padding: 0; /* Remove o padding */
+}
+
+.parceiros ul li {
+    flex: 0 1 150px; /* Define uma base mínima para cada item */
+    transition: transform 0.3s; /* Transição suave para o efeito hover */
+    display: flex; /* Ativa o flexbox */
+    justify-content: center; /* Centraliza a imagem dentro do item */
+    align-items: center; /* Alinha verticalmente ao centro */
+    height: 150px; /* Altura fixa para garantir uniformidade */
+}
+
+.parceiros ul li img {
+    max-width: 100%; /* Imagens ocupam toda a largura do contêiner */
+    height: auto; /* Mantém a proporção */
+    border-radius: 10px; /* Bordas arredondadas nas imagens */
+}
+
+.parceiros ul li:hover {
+    transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+}
+
+/* Footer */
+footer {
+    background: #940000; /* Cor de fundo do footer */
+    color: white; /* Cor do texto */
+    padding: 20px 0; /* Espaçamento interno */
+    margin-top: 40px; /* Espaçamento acima do footer */
+}
+
+.footer-container {
+    display: flex; /* Layout em linha */
+    justify-content: space-around; /* Espaçamento entre seções */
+    flex-wrap: wrap; /* Permite que as seções se ajustem em telas menores */
+}
+
+.footer-section {
+    flex: 1; /* Cada seção ocupa o mesmo espaço */
+    margin: 10px; /* Espaçamento entre seções */
+    min-width: 200px; /* Largura mínima das seções */
+}
+
+.footer-section h3 {
+    margin-bottom: 10px; /* Espaçamento abaixo do título */
+}
+
+.social-icons {
+    display: flex; /* Layout em linha para os ícones sociais */
+    gap: 15px; /* Espaçamento entre os ícones */
+}
+
+.social-icons a {
+    color: white; /* Cor dos ícones */
+    font-size: 1.5em; /* Tamanho dos ícones */
+    transition: color 0.3s; /* Transição suave para a cor */
+}
+
+.social-icons a:hover {
+    color: red; /* Cor ao passar o mouse */
+}
+
+.footer-bottom {
+    text-align: center; /* Centraliza o texto */
+    margin-top: 20px; /* Espaçamento acima */
+    font-size: 0.9em; /* Tamanho da fonte */
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    nav {
+        height: 60px; /* Altura reduzida para telas menores */
+    }
+
+    .logo {
+        max-height: 40px; /* Reduz a altura da logo */
+    }
+
+    ul li a {
+        font-size: 1em; /* Ajusta o tamanho da fonte */
+    }
+
+    .menu,
+    .close {
+        font-size: 1.5em; /* Tamanho menor para botões */
+    }
+
+    .slider {
+        max-width: 90%; /* O slider ocupa mais largura em telas menores */
+    }
+
+    .servico-card {
+        width: 150px; /* Reduz o tamanho dos cartões em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .menu,
+    .close {
+        font-size: 1.2em; /* Tamanho ainda menor para telas muito pequenas */
+    }
+
+    ul li a {
+        padding: 10px; /* Reduz o padding */
+    }
+
+    .slider {
+        margin: 20px auto; /* Reduz a margem em telas pequenas */
+    }
+
+    .parceiros img {
+        max-width: 80px; /* Reduz o tamanho máximo das imagens em telas pequenas */
+    }
+
+    .servico-card {
+        width: 100%; /* Cartões ocupam toda a largura em telas pequenas */
+    }
+}
+
+.contato {
+    padding: 40px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.contato h2 {
+    font-size: 2.5rem;
+    color: #940000;
+}
+
+.contato form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contato label {
+    margin: 10px 0 5px;
+}
+
+.contato input,
+.contato textarea {
+    width: 100%;
+    max-width: 400px; /* Ajuste conforme necessário */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contato button {
+    padding: 10px 20px;
+    background-color: #940000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.contato button:hover {
+    background-color: red;
+}
+
+.informacoes {
+    padding: 40px;
+    background-color: #ffffff; /* Fundo branco para destacar a seção */
+    text-align: center;
+}
+
+.informacoes h2 {
+    font-size: 2.5rem;
+    color: #940000;
+}
+
+.informacoes p {
+    font-size: 1.2em; /* Tamanho da fonte para os detalhes de contato */
+    color: #333;
+    margin: 10px 0; /* Espaçamento entre as linhas */
+}
+
+.mapa {
+    margin-top: 20px;
+    text-align: center; /* Centraliza o mapa */
+}
+
+.mapa iframe {
+    max-width: 100%; /* Garante que o mapa se ajuste a telas menores */
+    height: auto; /* Mantém a proporção */
+}
+
+.marcacoes {
+    padding: 40px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.marcacoes h2 {
+    font-size: 2.5rem;
+    color: #940000;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.marcacoes form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.marcacoes input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.marcacoes button {
+    padding: 10px 20px;
+    background-color: #940000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.marcacoes button:hover {
+    background-color: #a60000;
+}
+
+.hora-label {
+    color: red;
+    font-weight: bold;
+    font-size: 1.2rem; /* Ajusta conforme quiseres */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

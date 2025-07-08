@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villa Pet | Contactos</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png">
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showSidebar()"><ion-icon name="menu-outline" class="menu"></ion-icon></a>
+        <a href="#" onclick="hideSidebar()"><ion-icon name="close-outline" class="close"></ion-icon></a>
+        <img src="./img/VillaPetLogo.png" class="logo">
+        <div class="container">
+            <ul> 
+                <li><a href="./index.html">Inicio</a></li>
+                <li><a href="./marcacoes.html">Marcações</a></li>
+                <li><a href="#" style="color: red">Contactos</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <section class="informacoes">
+            <h2>Informações de Contato</h2>
+            <p><strong>Email:</strong> villapet@gmail.com.com</p>
+            <p><strong>Telefone:</strong> +351 912 345 678</p>
+            <p><strong>Localização:</strong> R. Vieira Portuense , Porto, Portugal</p>
+
+            <div class="mapa">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.911009166797!2d-8.633383316277978!3d41.16286472376699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2465a5df55d137%3A0xdd671ffbd0209085!2sR.%20Vieira%20Portuense%2080%2C%204050-230%20Porto!5e0!3m2!1spt-PT!2spt!4v1730106939369!5m2!1spt-PT!2spt" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+
+        <section class="contato">
+            <h2>Contacte-nos</h2>
+            <form id="contato-form">
+                <div>
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="mensagem">Mensagem:</label>
+                    <textarea id="mensagem" name="mensagem" required></textarea>
+                </div>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Sobre Nós</h3>
+                <p>Na Villa Pet, cuidamos do seu melhor amigo com amor e dedicação. Descubra nossos serviços e faça parte da nossa comunidade!</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contactos</h3>
+                <p>Email: villapet@gmail.com</p>
+                <p>Telefone: +351 912 345 678</p>
+            </div>
+            <div class="footer-section">
+                <h3>Siga-nos</h3>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </a>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </a>
+                    <a href="https://www.twitter.com/" target="_blank" rel="noopener noreferrer">
+                        <ion-icon name="logo-twitter"></ion-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Villa Pet. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
