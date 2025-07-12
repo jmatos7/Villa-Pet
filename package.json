@@ -4,12 +4,12 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"node --watch app.js\" \"live-server public\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@prisma/client": "^6.11.1",
     "cors": "^2.8.5",
@@ -18,6 +18,17 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "concurrently": "^9.2.0",
+    "live-server": "^1.2.2",
     "prisma": "^6.11.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmatos7/Villa-Pet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jmatos7/Villa-Pet/issues"
+  },
+  "homepage": "https://github.com/jmatos7/Villa-Pet#readme",
+  "description": ""
 }

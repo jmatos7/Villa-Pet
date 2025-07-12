@@ -1,4 +1,3 @@
-
 function showSidebar() {
     const sidebar = document.querySelector('.container');
     const close = document.querySelector('.close');
@@ -19,48 +18,16 @@ function hideSidebar() {
     menu.style.display = 'flex';
 }
 
-// Slider de imagens
-document.addEventListener('DOMContentLoaded', () => { // Wrap the script in DOMContentLoaded
-    const images = document.querySelectorAll('.image-container');
-    let currentIndex = 0;
-
-    // Add a check to see if images were found
-    if (images.length === 0) {
-        console.warn("No images found with the selector '.image-container'");
-        return; // Stop execution if no images are found
-    }
-
-    // Initially display the first image and add the 'active' class
-    images[currentIndex].style.display = 'block';
-    images[currentIndex].classList.add('active');
-
-    function showNextImage() {
-        // First, hide the currently displayed image
-        images[currentIndex].style.display = 'none';
-        images[currentIndex].classList.remove('active'); // Remove the active class from the current image
-
-        // Then, update the index to the next image
-        currentIndex = (currentIndex + 1) % images.length;
-
-        // Finally, display the next image
-        images[currentIndex].style.display = 'block';
-        images[currentIndex].classList.add('active'); // Add the active class to the next image
-    }
-
-    setInterval(showNextImage, 3000);
-});
-
-
 // FullCalendar
 let selectedDate = null;
 
 const serviceDurations = {
-  'Banho': 60,     // 60 minutos = 1 hora
-  'Creche': 120,   // 2 horas
-  'Treino': 90,    // 1h30
-  'Tosquia': 45,   // 45 minutos
-  'Spa': 30,       // 30 minutos
-  'Estadia': 1440  // 24 horas = 1 dia inteira (exemplo)
+    'Banho': 60,     // 60 minutos = 1 hora
+    'Creche': 480,   // 2 horas
+    'Treino': 90,    // 1h30
+    'Tosquia': 45,   // 45 minutos
+    'Spa': 30,       // 30 minutos
+    'Estadia': 1440  // 24 horas = 1 dia inteira (exemplo)
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -96,9 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
             calendar.gotoDate(info.date);
             calendar.changeView('timeGridDay');
 
-            selectedTime = null;
-            selectedService = null;
-
             const horarioISO = `${selectedDate}T${toString().padStart(2, '0')}:00`;
             const horaFormatada = horarioISO.split('T')[1].substring(0, 5);
 
@@ -112,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 textContent = horaFormatada;
                 horario = horarioISO;
-
 
                 // Remove seleção anterior
                 document.querySelectorAll('#time-list li.selected').forEach(item => {
@@ -129,11 +92,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-
             }
         },
         select: function (info) {
+            if (!info.start || !info.end) {
+                Swal.fire('Atenção', 'Por favor, selecione um horário válido.', 'warning');
+                return;
+            }
             const start = info.start;
+            console.log("Data selecionada:", start);
             const horaFormatada = start.toISOString().split('T')[1].substring(0, 5);
             selectedDate = start.toISOString().split('T')[0];
             selectedTime = horaFormatada;
@@ -144,9 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            document.getElementById('hora-escolhida').innerHTML =
-                `<span class="hora-label">Hora selecionada:</span> ${selectedTime} (${selectedService})`;
-
             document.getElementById('booking-form').style.display = 'block';
 
             // Remover fundo anterior, se houver
@@ -156,11 +120,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            
+            const durationMinutes = serviceSelect.value
+                ? serviceDurations[selectedService]
+                : 60; // valor padrão 60 minutos (1 hora) se não tiver seleção
 
+            const durationHours = durationMinutes / 60;
+
+            const endTime = new Date(start);
+            endTime.setHours(endTime.getHours() + durationHours);
+
+            endTime.setMinutes(endTime.getMinutes() + (serviceDurations[selectedService] % 60));
             // Adicionar um "evento de fundo" para destacar o slot
             calendar.addEvent({
                 start: info.start,
+                end: endTime,
                 display: 'background',
                 color: '#FFD700', // Amarelo ouro
                 temporaryHighlight: true
@@ -192,7 +165,11 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/bookings', {  // Corrigido o endpoint
+            if (!selectedDate || !selectedTime || !selectedService) {
+                Swal.fire('Atenção', 'Por favor, selecione data, hora e serviço.', 'warning');
+                return;
+            }
+            const response = await fetch('http://localhost:3000/bookings', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -202,16 +179,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || 'Erro ao guardar a marcação');
+                Swal.fire('Erro!', error.message || 'Não foi possível guardar a marcação.', 'error');
+                return;
             }
 
             const booking = await response.json();
+            const data = booking.data;
+            const hora = booking.hora;
+            const servico = booking.servico;
+
+            const start = new Date(`${data}T${hora}:00`);
+            const duration = serviceDurations[servico] || 60;
+            const end = new Date(start.getTime() + duration * 60000);
 
             calendar.addEvent({
                 title: booking.servico,
-                start: booking.hora,
-                allDay: false
+                start: start,
+                end: end,
+                allDay: false,
+                color: getServiceColor(booking.servico)
             });
+
 
             Swal.fire({
                 title: 'Sucesso!',
@@ -222,10 +210,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             event.target.reset();
             document.getElementById('booking-form').style.display = 'none';
-            //mostrarHorarios(selectedDate);
 
         } catch (error) {
             console.error(error);
+            console.log(error.message);
             Swal.fire('Erro!', error.message || 'Não foi possível guardar a marcação.', 'error');
         }
     });
@@ -237,13 +225,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(bookings => {
             bookings.forEach(booking => {
-                // Certifique-se que a hora está no formato correto
-                const horaCompleta = `${booking.data}`;
+                const data = booking.data;
+                const hora = booking.hora;
+                const servico = booking.servico;
+
+                const start = new Date(`${data}T${hora}:00`);
+                const duration = serviceDurations[servico] || 60;
+                const end = new Date(start.getTime() + duration * 60000);
 
                 calendar.addEvent({
-                    title: `${booking.servico} - ${booking.nomeAnimal}`,
-                    start: horaCompleta,
-                    end: horaCompleta, // Se necessário, ajuste o final para o horário correto
+                    title: `${booking.servico}`,
+                    start: start,
+                    end: end,
                     allDay: false,
                     color: getServiceColor(booking.servico), // Adiciona cor conforme o serviço
                     extendedProps: {

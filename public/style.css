@@ -103,20 +103,35 @@ ul li a {
     position: relative;
     max-width: 650px; /* Tamanho máximo do slider */
     margin: 40px auto; /* Margem superior/inferior de 40px e centraliza horizontalmente */
-    overflow: hidden; /* Esconde imagens fora do contêiner */
+    
 }
 
 .image-container {
     position: relative; /* Para controle de posição dos filhos */
     width: 100%; /* 100% do contêiner do slider */
+    height: 400px; /* Altura fixa para o slider */
 }
 
+
+
 .image-container img {
-    width: 100%; /* Faz com que a imagem preencha o contêiner */
-    height: auto; /* Mantém a proporção */
-    display: none; /* Esconde todas as imagens inicialmente */
-    transition: opacity 1s ease; /* Transição mais suave para a opacidade */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Preenche o container */
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 1;
+  pointer-events: none;
 }
+
+.image-container img.active {
+  opacity: 1;
+  z-index: 2;
+}
+
 
 .image-container img.active {
     display: block; /* Mostra apenas a imagem ativa */
@@ -136,6 +151,7 @@ ul li a {
     justify-content: center;
     align-items: center;
     text-align: center;
+    z-index: 999; /* Acima das imagens */
 }
 
 /* Seção "Quem Somos" */
@@ -165,40 +181,45 @@ ul li a {
 
 /* Serviços em Destaque */
 .servicos-destaque {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+
+  .servico-card {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    overflow: hidden;
+    min-height: 250px;
     display: flex;
-    flex-wrap: wrap; /* Permite que os cartões se ajustem */
-    justify-content: center; /* Centraliza os cartões */
-    gap: 20px; /* Espaçamento entre os cartões */
-    padding: 40px; /* Margem acima e abaixo */
-}
+    align-items: flex-end;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
 
-.servico-card {
-    position: relative; /* Para posicionar o conteúdo dentro do card */
-    background-size: cover; /* Faz a imagem cobrir todo o card */
-    background-position: center; /* Centraliza a imagem de fundo */
-    color: white; /* Cor do texto */
-    padding: 20px; /* Espaçamento interno */
-    border-radius: 8px; /* Bordas arredondadas */
-    margin-bottom: 20px; /* Espaçamento entre os cartões */
-    height: 200px; /* Altura fixa para os cartões */
-    display: flex; /* Para usar flexbox */
-    align-items: flex-end; /* Alinha o texto ao fundo */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* Sombra no texto para melhor legibilidade */
-    overflow: hidden; /* Esconde o que ultrapassa o card */
-}
+  .servico-card:hover {
+    transform: scale(1.02);
+  }
 
-.servico-content {
-    position: relative; /* Para posicionar o conteúdo */
-    z-index: 1; /* Coloca o conteúdo acima da imagem de fundo */
-    padding: 10px; /* Espaçamento interno do conteúdo */
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para o conteúdo */
-    border-radius: 8px; /* Bordas arredondadas para o fundo do conteúdo */
-}
+  .servico-content {
+    background: rgba(0, 0, 0, 0.5); /* Fundo escuro translúcido */
+    color: white;
+    width: 100%;
+    padding: 1rem;
+  }
 
-.servico-card:hover {
-    transform: scale(1.05); /* Aumenta o cartão ao passar o mouse */
-}
+  .servico-content h3 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
 
+  .servico-content p {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
 /* Seção de Parcerias */
 .parcerias {
     background-color: rgb(255, 255, 255);

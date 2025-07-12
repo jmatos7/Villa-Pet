@@ -16,7 +16,7 @@ model Booking {
   tipoAnimal  String
   raca        String
   sexo        String
-  email       String
+  email       String 
   telefone    String
   alerta      String?
   data        String
