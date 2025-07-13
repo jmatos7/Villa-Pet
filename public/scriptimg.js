@@ -1,22 +1,32 @@
-function showSidebar() {
-    const sidebar = document.querySelector('.container');
-    const close = document.querySelector('.close');
-    const menu = document.querySelector('.menu');
+const container = document.querySelector('.menu-container'); 
+const menuButton = document.querySelector('.button');
+const dropdownMenu = document.getElementById('dropdown-menu');
 
-    sidebar.style.display = 'flex';
-    close.style.display = 'flex';
-    menu.style.display = 'none';
-}
+menuButton.addEventListener('click', () => {
+  dropdownMenu.classList.toggle('show');
+});
 
-function hideSidebar() {
-    const sidebar = document.querySelector('.container');
-    const close = document.querySelector('.close');
-    const menu = document.querySelector('.menu');
+container.addEventListener('mouseenter', () => {
+  menuButton.classList.add('show');
+});
 
-    sidebar.style.display = 'none';
-    close.style.display = 'none';
-    menu.style.display = 'flex';
-}
+container.addEventListener('mouseleave', () => {
+  menuButton.classList.add('show');
+});
+
+container.addEventListener('mouseleave', () => {
+  dropdownMenu.classList.remove('show');
+});
+
+document.querySelectorAll('.dropdown-menu li a').forEach(link => {
+  link.addEventListener('mousemove', e => {
+    const rect = link.getBoundingClientRect();
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    link.style.setProperty('--mouse-y', `${y}%`);
+  });
+});
+
+
 
 // Slider de imagens
 document.addEventListener('DOMContentLoaded', () => {

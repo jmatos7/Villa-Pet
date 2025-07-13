@@ -9,12 +9,14 @@
 
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #f9f9f9; /* Fundo claro para todo o site */
-    color: #333; /* Cor do texto */
+    background-color: #f9f9f9;
+    /* Fundo claro para todo o site */
+    color: #333;
+    /* Cor do texto */
 }
 
 .logo {
-    max-height: 60px; /* Altura máxima para a logo */
+    max-height: 60px;
     padding: 10px;
     margin: 5px;
     position: absolute;
@@ -27,115 +29,257 @@ nav {
     background: #940000;
     width: 100%;
     height: 80px;
-    position: relative; /* Para o z-index funcionar */
-    z-index: 10; /* Garante que a navbar esteja acima de outros elementos */
-    transition: background 0.3s ease, height 0.3s ease; /* Adiciona transição ao fundo e altura */
+    position: relative;
+    z-index: 10;
+    transition: background 0.3s ease, height 0.3s ease;
+    /* Adiciona transição ao fundo e altura */
 }
 
-.container {
-    height: auto; /* Ajuste conforme necessário */
-    background: #940000;
-    top: 80px; /* Ajuste para logo abaixo da navbar */
-    position: fixed; /* Certifique-se de que é fixed */
-    display: none; /* Continua escondido até ser ativado */
-    z-index: 20; /* Garante que o menu esteja acima de outros elementos */
+#profile-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
 }
 
-ul {
-    width: 100%;
+.paw-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #940000;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-ul li {
+.paw-button ion-icon {
+  font-size: 24px;
+}
+
+.paw-button:hover {
+  animation: tail-wag 0.5s ease-in-out 2;
+}
+
+@keyframes tail-wag {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+
+/* Main Styles */
+.button {
     display: flex;
-    width: 100%;
+    align-items: center;
     justify-content: center;
-}
-
-ul li a {
-    color: white;
-    padding: 15px;
-    font-size: 1.2em; /* Usando unidade relativa */
-    transition: background 0.5s;
-}
-
-.container li:hover {
-    background: red;
-}
-
-.menu {
+    width: 200px;
+    height: 80px;
+    line-height: 70px;
+    margin: auto;
+    margin-left: 20px;
+    color: #fff;
     position: absolute;
-    font-size: 3em; /* Tamanho maior em unidades relativas */
-    padding: 3px;
-    margin: 10px;
-    border-radius: 3px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    gap: 10px;
+
     cursor: pointer;
-    color: white;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.310, -0.105, 0.430, 1.400);
+
+    span,
+    .icon {
+        display: block;
+        height: 100%;
+        text-align: center;
+        justify-content: center;
+        position: absolute;
+    }
+
+    span {
+        width: 72%;
+        text-align: center;
+        font-size: 22px;
+        text-transform: uppercase;
+        transition: all 0.25s cubic-bezier(0.310, -0.105, 0.430, 1.400);
+    }
+
+    .icon {
+        width: 28%;
+        height: 100%;
+        left: 0;
+        transition: all 0.25s cubic-bezier(0.310, -0.105, 0.430, 1.400);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .fa {
+            width: 36px;
+            height: 36px;
+            font-size: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: #940000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.310, -0.105, 0.430, 1.400), height 0.25s ease;
+        }
+
+    }
+
+    &:hover {
+
+        span {
+            left: -72%;
+            opacity: 0;
+        }
+
+        .icon {
+            width: 100%;
+        }
+    }
+
+    &:hover {
+        opacity: .9;
+
+    }
+
+}
+
+/* MENU DROPDOWN (INICIALMENTE ESCONDIDO) */
+.dropdown-menu {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    width: 200px;
+    background: #940000;
+    border-radius: 10px;
+    overflow: hidden;
+
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+
     display: flex;
+    flex-direction: column;
+    text-align: center;
+    z-index: 1000;
 }
 
-.close {
-    position: absolute;
-    font-size: 3em; /* Tamanho maior em unidades relativas */
-    padding: 3px;
-    margin: 10px;
-    border-radius: 3px;
-    cursor: pointer;
+.dropdown-menu.show {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown-menu ul {
+    padding: 0;
+    margin: 5px;
+    list-style: none;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 15px 30px;
+    font-size: 1.2em;
     color: white;
-    display: none;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    border-radius: 10rem;
+    transition: color 0.3s ease;
 }
 
-.menu:hover,
-.close:hover {
-    color: red;
-    transition: 0.9s;
+/* Fundo animado controlado pelo rato */
+.dropdown-menu li a::before {
+    content: "";
+    position: absolute;
+    top: var(--mouse-y, 0%);
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: white;
+    z-index: -1;
+    transition: height 0.3s ease, top 0.3s ease;
+    border-radius: 10rem;
 }
+
+.dropdown-menu li a:hover::before {
+    height: 100%;
+    top: 0;
+}
+
+.dropdown-menu li a:hover {
+    color: #940000;
+}
+
 
 /* Títulos de Seção */
 .section-title {
     text-align: center;
     margin: 40px 0;
     font-size: 2.5rem;
-    color: #940000; /* Cor da seção */
+    color: #940000;
 }
 
 /* Slider */
 .slider {
     position: relative;
-    max-width: 650px; /* Tamanho máximo do slider */
-    margin: 40px auto; /* Margem superior/inferior de 40px e centraliza horizontalmente */
-    
+    max-width: 650px;
+    /* Tamanho máximo do slider */
+    margin: 40px auto;
+    /* Margem superior/inferior de 40px e centraliza horizontalmente */
+
 }
 
 .image-container {
-    position: relative; /* Para controle de posição dos filhos */
-    width: 100%; /* 100% do contêiner do slider */
-    height: 400px; /* Altura fixa para o slider */
+    position: relative;
+    /* Para controle de posição dos filhos */
+    width: 100%;
+    /* 100% do contêiner do slider */
+    height: 400px;
+    /* Altura fixa para o slider */
 }
 
 
 
 .image-container img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Preenche o container */
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  z-index: 1;
-  pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Preenche o container */
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .image-container img.active {
-  opacity: 1;
-  z-index: 2;
+    opacity: 1;
+    z-index: 2;
 }
 
 
 .image-container img.active {
-    display: block; /* Mostra apenas a imagem ativa */
-    opacity: 1; /* Totalmente visível */
+    display: block;
+    /* Mostra apenas a imagem ativa */
+    opacity: 1;
+    /* Totalmente visível */
 }
 
 .overlay {
@@ -144,21 +288,24 @@ ul li a {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    background: rgba(0, 0, 0, 0.5);
+    /* Fundo semi-transparente */
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    z-index: 999; /* Acima das imagens */
+    z-index: 999;
+    /* Acima das imagens */
 }
 
 /* Seção "Quem Somos" */
 .quem-somos {
     text-align: center;
     padding: 40px;
-    background: #ffffff; /* Fundo claro para destacar a seção */
+    background: #ffffff;
+    /* Fundo claro para destacar a seção */
 }
 
 .servicos {
@@ -167,15 +314,21 @@ ul li a {
 
 /* Título dos Serviços */
 .titulos {
-    display: flex; /* Ativa o flexbox */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente se necessário */
+    display: flex;
+    /* Ativa o flexbox */
+    justify-content: center;
+    /* Centraliza horizontalmente */
+    align-items: center;
+    /* Centraliza verticalmente se necessário */
 }
 
 .titulos h2 {
-    text-align: center; /* Centraliza o texto */
-    font-size: 2em; /* Tamanho da fonte */
-    color: #940000; /* Cor do texto */
+    text-align: center;
+    /* Centraliza o texto */
+    font-size: 2em;
+    /* Tamanho da fonte */
+    color: #940000;
+    /* Cor do texto */
     padding: 5px;
 }
 
@@ -185,9 +338,9 @@ ul li a {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
     padding: 2rem;
-  }
+}
 
-  .servico-card {
+.servico-card {
     position: relative;
     background-size: cover;
     background-position: center;
@@ -198,28 +351,30 @@ ul li a {
     align-items: flex-end;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
-  }
+}
 
-  .servico-card:hover {
+.servico-card:hover {
     transform: scale(1.02);
-  }
+}
 
-  .servico-content {
-    background: rgba(0, 0, 0, 0.5); /* Fundo escuro translúcido */
+.servico-content {
+    background: rgba(0, 0, 0, 0.5);
+    /* Fundo escuro translúcido */
     color: white;
     width: 100%;
     padding: 1rem;
-  }
+}
 
-  .servico-content h3 {
+.servico-content h3 {
     margin: 0;
     font-size: 1.4rem;
-  }
+}
 
-  .servico-content p {
+.servico-content p {
     margin-top: 0.5rem;
     font-size: 1rem;
-  }
+}
+
 /* Seção de Parcerias */
 .parcerias {
     background-color: rgb(255, 255, 255);
@@ -227,129 +382,176 @@ ul li a {
 
 .parceiros {
     padding: 40px;
-    text-align: center; /* Centraliza o texto */
+    text-align: center;
+    /* Centraliza o texto */
 }
 
 .parceiros ul {
     display: flex;
-    flex-wrap: wrap; /* Permite que os itens se ajustem */
-    justify-content: center; /* Centraliza os itens */
-    gap: 30px; /* Espaçamento entre os ícones */
-    padding: 0; /* Remove o padding */
+    flex-wrap: wrap;
+    /* Permite que os itens se ajustem */
+    justify-content: center;
+    /* Centraliza os itens */
+    gap: 30px;
+    /* Espaçamento entre os ícones */
+    padding: 0;
+    /* Remove o padding */
 }
 
 .parceiros ul li {
-    flex: 0 1 150px; /* Define uma base mínima para cada item */
-    transition: transform 0.3s; /* Transição suave para o efeito hover */
-    display: flex; /* Ativa o flexbox */
-    justify-content: center; /* Centraliza a imagem dentro do item */
-    align-items: center; /* Alinha verticalmente ao centro */
-    height: 150px; /* Altura fixa para garantir uniformidade */
+    flex: 0 1 150px;
+    /* Define uma base mínima para cada item */
+    transition: transform 0.3s;
+    /* Transição suave para o efeito hover */
+    display: flex;
+    /* Ativa o flexbox */
+    justify-content: center;
+    /* Centraliza a imagem dentro do item */
+    align-items: center;
+    /* Alinha verticalmente ao centro */
+    height: 150px;
+    /* Altura fixa para garantir uniformidade */
 }
 
 .parceiros ul li img {
-    max-width: 100%; /* Imagens ocupam toda a largura do contêiner */
-    height: auto; /* Mantém a proporção */
-    border-radius: 10px; /* Bordas arredondadas nas imagens */
+    max-width: 100%;
+    /* Imagens ocupam toda a largura do contêiner */
+    height: auto;
+    /* Mantém a proporção */
+    border-radius: 10px;
+    /* Bordas arredondadas nas imagens */
 }
 
 .parceiros ul li:hover {
-    transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+    transform: scale(1.05);
+    /* Aumenta o tamanho ao passar o mouse */
 }
 
 /* Footer */
 footer {
-    background: #940000; /* Cor de fundo do footer */
-    color: white; /* Cor do texto */
-    padding: 20px 0; /* Espaçamento interno */
-    margin-top: 40px; /* Espaçamento acima do footer */
+    background: #940000;
+    /* Cor de fundo do footer */
+    color: white;
+    /* Cor do texto */
+    padding: 20px 0;
+    /* Espaçamento interno */
+    margin-top: 40px;
+    /* Espaçamento acima do footer */
 }
 
 .footer-container {
-    display: flex; /* Layout em linha */
-    justify-content: space-around; /* Espaçamento entre seções */
-    flex-wrap: wrap; /* Permite que as seções se ajustem em telas menores */
+    display: flex;
+    /* Layout em linha */
+    justify-content: space-around;
+    /* Espaçamento entre seções */
+    flex-wrap: wrap;
+    /* Permite que as seções se ajustem em telas menores */
 }
 
 .footer-section {
-    flex: 1; /* Cada seção ocupa o mesmo espaço */
-    margin: 10px; /* Espaçamento entre seções */
-    min-width: 200px; /* Largura mínima das seções */
+    flex: 1;
+    /* Cada seção ocupa o mesmo espaço */
+    margin: 10px;
+    /* Espaçamento entre seções */
+    min-width: 200px;
+    /* Largura mínima das seções */
 }
 
 .footer-section h3 {
-    margin-bottom: 10px; /* Espaçamento abaixo do título */
+    margin-bottom: 10px;
+    /* Espaçamento abaixo do título */
 }
 
 .social-icons {
-    display: flex; /* Layout em linha para os ícones sociais */
-    gap: 15px; /* Espaçamento entre os ícones */
+    display: flex;
+    /* Layout em linha para os ícones sociais */
+    gap: 15px;
+    /* Espaçamento entre os ícones */
 }
 
 .social-icons a {
-    color: white; /* Cor dos ícones */
-    font-size: 1.5em; /* Tamanho dos ícones */
-    transition: color 0.3s; /* Transição suave para a cor */
+    color: white;
+    /* Cor dos ícones */
+    font-size: 1.5em;
+    /* Tamanho dos ícones */
+    transition: color 0.3s;
+    /* Transição suave para a cor */
 }
 
 .social-icons a:hover {
-    color: red; /* Cor ao passar o mouse */
+    color: red;
+    /* Cor ao passar o mouse */
 }
 
 .footer-bottom {
-    text-align: center; /* Centraliza o texto */
-    margin-top: 20px; /* Espaçamento acima */
-    font-size: 0.9em; /* Tamanho da fonte */
+    text-align: center;
+    /* Centraliza o texto */
+    margin-top: 20px;
+    /* Espaçamento acima */
+    font-size: 0.9em;
+    /* Tamanho da fonte */
 }
 
 /* Media Queries para responsividade */
 @media (max-width: 768px) {
     nav {
-        height: 60px; /* Altura reduzida para telas menores */
+        height: 60px;
+        /* Altura reduzida para telas menores */
     }
 
     .logo {
-        max-height: 40px; /* Reduz a altura da logo */
+        max-height: 40px;
+        /* Reduz a altura da logo */
     }
 
     ul li a {
-        font-size: 1em; /* Ajusta o tamanho da fonte */
+        font-size: 1em;
+        /* Ajusta o tamanho da fonte */
     }
 
     .menu,
     .close {
-        font-size: 1.5em; /* Tamanho menor para botões */
+        font-size: 1.5em;
+        /* Tamanho menor para botões */
     }
 
     .slider {
-        max-width: 90%; /* O slider ocupa mais largura em telas menores */
+        max-width: 90%;
+        /* O slider ocupa mais largura em telas menores */
     }
 
     .servico-card {
-        width: 150px; /* Reduz o tamanho dos cartões em telas menores */
+        width: 150px;
+        /* Reduz o tamanho dos cartões em telas menores */
     }
 }
 
 @media (max-width: 480px) {
+
     .menu,
     .close {
-        font-size: 1.2em; /* Tamanho ainda menor para telas muito pequenas */
+        font-size: 1.2em;
+        /* Tamanho ainda menor para telas muito pequenas */
     }
 
     ul li a {
-        padding: 10px; /* Reduz o padding */
+        padding: 10px;
+        /* Reduz o padding */
     }
 
     .slider {
-        margin: 20px auto; /* Reduz a margem em telas pequenas */
+        margin: 20px auto;
+        /* Reduz a margem em telas pequenas */
     }
 
     .parceiros img {
-        max-width: 80px; /* Reduz o tamanho máximo das imagens em telas pequenas */
+        max-width: 80px;
+        /* Reduz o tamanho máximo das imagens em telas pequenas */
     }
 
     .servico-card {
-        width: 100%; /* Cartões ocupam toda a largura em telas pequenas */
+        width: 100%;
+        /* Cartões ocupam toda a largura em telas pequenas */
     }
 }
 
@@ -377,7 +579,8 @@ footer {
 .contato input,
 .contato textarea {
     width: 100%;
-    max-width: 400px; /* Ajuste conforme necessário */
+    max-width: 400px;
+    /* Ajuste conforme necessário */
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -399,7 +602,8 @@ footer {
 
 .informacoes {
     padding: 40px;
-    background-color: #ffffff; /* Fundo branco para destacar a seção */
+    background-color: #ffffff;
+    /* Fundo branco para destacar a seção */
     text-align: center;
 }
 
@@ -409,19 +613,24 @@ footer {
 }
 
 .informacoes p {
-    font-size: 1.2em; /* Tamanho da fonte para os detalhes de contato */
+    font-size: 1.2em;
+    /* Tamanho da fonte para os detalhes de contato */
     color: #333;
-    margin: 10px 0; /* Espaçamento entre as linhas */
+    margin: 10px 0;
+    /* Espaçamento entre as linhas */
 }
 
 .mapa {
     margin-top: 20px;
-    text-align: center; /* Centraliza o mapa */
+    text-align: center;
+    /* Centraliza o mapa */
 }
 
 .mapa iframe {
-    max-width: 100%; /* Garante que o mapa se ajuste a telas menores */
-    height: auto; /* Mantém a proporção */
+    max-width: 100%;
+    /* Garante que o mapa se ajuste a telas menores */
+    height: auto;
+    /* Mantém a proporção */
 }
 
 .marcacoes {
@@ -471,6 +680,67 @@ footer {
 .hora-label {
     color: red;
     font-weight: bold;
-    font-size: 1.2rem; /* Ajusta conforme quiseres */
+    font-size: 1.2rem;
+    /* Ajusta conforme quiseres */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+
+ h1 {
+    color: #940000;
+    text-align: center;
+  }
+
+  .profile-info, .animal-list, .add-animal-form {
+    background: white;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  .profile-info p {
+    font-size: 1.1em;
+    margin: 8px 0;
+  }
+
+  .animal-list ul {
+    list-style: disc inside;
+    padding-left: 0;
+  }
+
+  .animal-list ul li {
+    margin: 5px 0;
+    font-size: 1.1em;
+  }
+
+  label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 4px;
+  }
+
+  button {
+    margin-top: 15px;
+    background: #940000;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background: #cc0000;
+  }

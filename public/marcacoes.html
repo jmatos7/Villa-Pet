@@ -19,17 +19,34 @@
 </head>
 <body>
     <nav>
-        <a href="#" onclick="showSidebar()"><ion-icon name="menu-outline" class="menu"></ion-icon></a>
-        <a href="#" onclick="hideSidebar()"><ion-icon name="close-outline" class="close"></ion-icon></a>
-        <img src="./img/VillaPetLogo.png" class="logo">
-        <div class="container">
-            <ul>
-                <li><a href="./index.html">Inicio</a></li>
-                <li><a href="#" style="color: red">Marcações</a></li>
-                <li><a href="./contactos.html">Contactos</a></li>
-            </ul>
+        <div class="menu-container">
+            <a class="button" href="#" role="button">
+                <div class="icon">
+                    <i class="fa fa-remove"><ion-icon name="menu-outline" class="menu"></ion-icon></i>
+                </div>
+                <span>Menu</span>
+            </a>
+            
+
+            <!-- Menu lateral -->
+            <div id="dropdown-menu" class="dropdown-menu">
+                <ul>
+                    <li><a href="./index.html"><ion-icon name="home-outline"></ion-icon>Início</a></li>
+                    <li><a href="#"><ion-icon name="calendar-outline"></ion-icon>Marcaçoes</a></li>
+                    <li><a href="./contactos.html"><ion-icon name="call-outline"></ion-icon>Contactos</a></li>
+                </ul>
+            </div>
         </div>
+
+        <div id="profile-icon">
+            <a href="./perfil.html" class="paw-button" title="Meu Perfil">
+                <ion-icon name="paw-outline"></ion-icon> 
+                <span>Meu Perfil</span>
+            </a>
+        </div>
+        <img src="./img/VillaPetLogo.png" class="logo" />
     </nav>
+
     <main>
         <section class="marcacoes">
             <h2>Faça uma Marcação</h2>
