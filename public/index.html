@@ -9,6 +9,7 @@
         href="./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png">
     <link rel="stylesheet" href="./style.css">
     <script src="./scriptimg.js" defer></script>
+    <script src="./nav.js" defer></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
 
@@ -34,8 +35,8 @@
         </div>
 
         <div id="profile-icon">
-            <a href="./perfil.html" class="paw-button" title="Meu Perfil">
-                <ion-icon name="paw-outline"></ion-icon> 
+            <a href="#" class="paw-button" title="Meu Perfil">
+                <ion-icon name="paw-outline"></ion-icon>
                 <span>Meu Perfil</span>
             </a>
         </div>
@@ -190,6 +191,52 @@
             <p>&copy; 2024 Villa Pet. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <div id="loginModal" class="modal" aria-hidden="true" aria-labelledby="modalTitle" role="dialog">
+        <div class="modal-content">
+            <span id="closeModal" class="close" aria-label="Fechar">&times;</span>
+
+            <div class="tabs" role="tablist">
+                <button id="loginTab" class="active" role="tab" aria-selected="true"
+                    aria-controls="loginForm">Login</button>
+                <button id="registerTab" role="tab" aria-selected="false" aria-controls="registerForm">Registo</button>
+            </div>
+
+            <form id="loginForm" class="active" role="tabpanel" aria-labelledby="loginTab">
+                <div class="input-group">
+                    <input type="email" id="loginEmail" name="loginEmail" required autocomplete="username"
+                        placeholder=" " />
+                    <label for="loginEmail">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" name="loginPassword" required
+                        autocomplete="current-password" placeholder=" " />
+                    <label for="loginPassword">Password</label>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+
+            <form id="registerForm" role="tabpanel" aria-labelledby="registerTab">
+                <div class="input-group">
+                    <input type="text" id="registerName" name="registerName" required autocomplete="name"
+                        placeholder=" " />
+                    <label for="registerName">Nome</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="registerEmail" name="registerEmail" required autocomplete="email"
+                        placeholder=" " />
+                    <label for="registerEmail">Email</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="registerPassword" name="registerPassword" required placeholder=" " />
+                    <label for="registerPassword">Password</label>
+                </div>
+                <button type="submit">Registar</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>

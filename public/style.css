@@ -7,6 +7,12 @@
     list-style: none;
 }
 
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: #f9f9f9;
@@ -36,40 +42,54 @@ nav {
 }
 
 #profile-icon {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
 }
 
 .paw-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #940000;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-size: 18px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #940000;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .paw-button ion-icon {
-  font-size: 24px;
+    font-size: 24px;
 }
 
 .paw-button:hover {
-  animation: tail-wag 0.5s ease-in-out 2;
+    animation: tail-wag 0.5s ease-in-out 2;
 }
 
 @keyframes tail-wag {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(-5deg); }
-  75% { transform: rotate(3deg); }
-  100% { transform: rotate(0deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(5deg);
+    }
+
+    50% {
+        transform: rotate(-5deg);
+    }
+
+    75% {
+        transform: rotate(3deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
 
@@ -603,7 +623,6 @@ footer {
 .informacoes {
     padding: 40px;
     background-color: #ffffff;
-    /* Fundo branco para destacar a seção */
     text-align: center;
 }
 
@@ -614,10 +633,8 @@ footer {
 
 .informacoes p {
     font-size: 1.2em;
-    /* Tamanho da fonte para os detalhes de contato */
     color: #333;
     margin: 10px 0;
-    /* Espaçamento entre as linhas */
 }
 
 .mapa {
@@ -628,9 +645,7 @@ footer {
 
 .mapa iframe {
     max-width: 100%;
-    /* Garante que o mapa se ajuste a telas menores */
     height: auto;
-    /* Mantém a proporção */
 }
 
 .marcacoes {
@@ -686,50 +701,54 @@ footer {
 }
 
 
- h1 {
+h1 {
     color: #940000;
     text-align: center;
-  }
+}
 
-  .profile-info, .animal-list, .add-animal-form {
+.profile-info,
+.animal-list,
+.add-animal-form {
     background: white;
     padding: 15px 20px;
     margin-bottom: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-  .profile-info p {
+.profile-info p {
     font-size: 1.1em;
     margin: 8px 0;
-  }
+}
 
-  .animal-list ul {
+.animal-list ul {
     list-style: disc inside;
     padding-left: 0;
-  }
+}
 
-  .animal-list ul li {
+.animal-list ul li {
     margin: 5px 0;
     font-size: 1.1em;
-  }
+}
 
-  label {
+label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
-  }
+}
 
-  input[type="text"], input[type="email"], input[type="tel"] {
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
     width: 100%;
     padding: 8px 10px;
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 4px;
-  }
+}
 
-  button {
+button {
     margin-top: 15px;
     background: #940000;
     color: white;
@@ -739,8 +758,252 @@ footer {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
+}
 
-  button:hover {
+button:hover {
     background: #cc0000;
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+@keyframes pata-entra {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(10);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.pata-view {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background-image: url('./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translate(-50%, -50%);
+    z-index: 999999;
+    animation: pata-entra 0.8s ease-in-out forwards;
+    pointer-events: none;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  inset: 0; /* shorthand para top:0; right:0; bottom:0; left:0; */
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  display: flex; /* para centrar o conteúdo */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-content {
+  position: relative;
+  width: 360px;
+  max-width: 90%;
+  background-image: url('./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 16px;
+  padding: 40px 30px 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  overflow: hidden;
+  backdrop-filter: brightness(0.8);
+}
+
+/* Overlay para escurecer o fundo da imagem e garantir contraste */
+.modal-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  z-index: 0;
+}
+
+/* Conteúdo por cima do overlay */
+.modal-content > * {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #eee;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  user-select: none;
+}
+
+.close:hover {
+  color: #fc3838;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.tabs button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #ddd;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.tabs button.active {
+  border-color: #fc3838;
+  color: #fc3838;
+}
+
+form {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+}
+
+form.active {
+  display: flex;
+}
+
+/* Floating labels: container para cada input+label */
+.input-group {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 16px 16px 16px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #eee;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.input-group input::placeholder {
+  color: transparent; /* esconde o placeholder */
+}
+
+.input-group input:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 12px rgba(252, 56, 56, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color:rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 14px #fc3838;
+  color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+/* Label estilo "flutuante" com animação suave */
+.input-group label {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: #ccc;
+  font-size: 16px;
+  font-weight: 500;
+  pointer-events: none;
+  background-color: transparent;
+  padding: 0 6px;
+  transition: 
+    top 0.3s ease, 
+    font-size 0.3s ease, 
+    color 0.3s ease, 
+    background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Quando input tem texto, está em foco ou hover: label sobe e muda estilo */
+.input-group input:hover + label,
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  font-size: 13px;
+  color: #fc3838;
+}
+
+
+/* Botão submit */
+button[type="submit"] {
+  background-color: #fc3838;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 14px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.07em;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(252, 56, 56, 0.5);
+}
+
+button[type="submit"]:hover {
+  background-color: #e72e2e;
+  box-shadow: 0 6px 18px rgba(231, 46, 46, 0.8);
+}
+
+@media (max-width: 400px) {
+  .modal-content {
+    width: 90vw;
+    padding: 30px 20px 20px;
   }
+  .tabs button {
+    font-size: 14px;
+  }
+  button[type="submit"] {
+    font-size: 14px;
+    padding: 12px 0;
+  }
+}
