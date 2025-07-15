@@ -130,15 +130,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log("Data selecionada:", selectedDate);
 
+        const userId = localStorage.getItem('userId');
+        const animalId = document.getElementById('animal-select').value;
+
         const formData = {
-            nomePaiMae: document.getElementById('nome-pai-mae').value,
-            nomeAnimal: document.getElementById('nome-animal').value,
-            tipoAnimal: document.getElementById('tipo-animal').value,
-            raca: document.getElementById('raca').value,
-            sexo: document.getElementById('sexo').value,
-            email: document.getElementById('email').value,
-            telefone: document.getElementById('telefone').value,
-            alerta: document.getElementById('alerta').value,
+            userId: userId,
+            animalId: animalId,
             data: selectedDate,
             hora: selectedTime,
             servico: selectedService,

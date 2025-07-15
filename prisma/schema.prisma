@@ -8,19 +8,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  nome      String
+  email     String    @unique
+  password  String
+  telefone  String    @unique
+  animais   Animal[]
+  bookings  Booking[] // Faz sentido manter esta relação
+  createdAt DateTime  @default(now())
+}
+
+model Animal {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  nome      String
+  tipo      String
+  raca      String
+  sexo      String
+  donoId    String    @db.ObjectId
+  dono      User      @relation(fields: [donoId], references: [id])
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+}
 
 model Booking {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  nomePaiMae  String
-  nomeAnimal  String
-  tipoAnimal  String
-  raca        String
-  sexo        String
-  email       String 
-  telefone    String
-  alerta      String?
-  data        String
-  hora        String
-  servico     String
-  createdAt   DateTime @default(now())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  data       String
+  hora       String
+  servico    String
+  alerta     String?
+
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
+
+  animalId   String   @db.ObjectId
+  animal     Animal   @relation(fields: [animalId], references: [id])
+
+  createdAt  DateTime @default(now())
 }
+

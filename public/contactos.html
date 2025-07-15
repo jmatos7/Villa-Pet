@@ -109,6 +109,51 @@
             <p>&copy; 2024 Villa Pet. Todos os direitos reservados.</p>
         </div>
     </footer>
+    <div id="loginModal" class="modal" aria-hidden="true" aria-labelledby="modalTitle" role="dialog">
+        <div class="modal-content">
+            <span id="closeModal" class="close" aria-label="Fechar">&times;</span>
+
+            <div class="tabs" role="tablist">
+                <button id="loginTab" class="active" role="tab" aria-selected="true"
+                    aria-controls="loginForm">Login</button>
+                <button id="registerTab" role="tab" aria-selected="false" aria-controls="registerForm">Registo</button>
+            </div>
+
+            <form id="loginForm" class="active" role="tabpanel" aria-labelledby="loginTab">
+                <div class="input-group">
+                    <input type="email" id="loginEmail" name="loginEmail" required autocomplete="username"
+                        placeholder=" " />
+                    <label for="loginEmail">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" name="loginPassword" required
+                        autocomplete="current-password" placeholder=" " />
+                    <label for="loginPassword">Password</label>
+                </div>
+                <button type="submit" class="button-submitt">Entrar</button>
+            </form>
+
+            <form id="registerForm" role="tabpanel" aria-labelledby="registerTab">
+                <div class="input-group">
+                    <input type="text" id="registerName" name="registerName" required autocomplete="name"
+                        placeholder=" " />
+                    <label for="registerName">Nome</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="registerEmail" name="registerEmail" required autocomplete="email"
+                        placeholder=" " />
+                    <label for="registerEmail">Email</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="registerPassword" name="registerPassword" required placeholder=" " />
+                    <label for="registerPassword">Password</label>
+                </div>
+                <button type="submit" class="button-submitt">Registar</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
