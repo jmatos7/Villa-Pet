@@ -1,18 +1,34 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+import {autenticar} from './auth.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// __filename (caminho do ficheiro atual)
+const __filename = fileURLToPath(import.meta.url);
+
+// __dirname (pasta do ficheiro atual)
+const __dirname = path.dirname(__filename);
+
+
 
 const app = express();
 const prisma = new PrismaClient();
-
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 // Middleware
 app.use(cors({
-  origin: ['http://127.0.0.1:8080', 'http://127.0.0.1:5500','http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
+  origin: ['http://127.0.0.1:8080','http://localhost:8080'],
+  credentials: true
 }));
-app.use(express.json());
+
 
 // Duração dos serviços
 const serviceDurations = {
@@ -162,8 +178,33 @@ app.post('/login', async (req, res) => {
   const valid = await bcrypt.compare(password, user.password);
   if (!valid) return res.status(401).json({ error: 'Credenciais inválidas' });
 
-  // Aqui podes gerar token ou sessão
-  res.json({ message: 'Login bem-sucedido', user: { id: user.id, nome: user.nome } });
+  const token = jwt.sign({ id: user.id, nome: user.nome }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  console.log('Token gerado:', token);
+  // Enviar token em cookie HttpOnly
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: false,       
+    sameSite: 'lax', 
+    maxAge: 24 * 60 * 60 * 1000// 1 dias
+  });
+
+  res.json({nome: user.nome, message: 'Login bem-sucedido' });
+});
+
+app.post('/logout', async (req, res) => {
+  res.clearCookie('token');
+  res.json({ message: 'Sessão terminada' });
+});
+
+app.get('/me', autenticar , async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.id },
+    select: { id: true, nome: true, email: true, telefone: true }
+  });
+
+  if (!user) return res.status(404).json({ error: 'Utilizador não encontrado' });
+
+  res.json(user || {});
 });
 
 
@@ -221,9 +262,8 @@ app.get('/users/:id/bookings', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('API Villa Pet a funcionar!');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
 app.listen(3000, () => {
   console.log('Servidor a correr em http://localhost:3000');
 });

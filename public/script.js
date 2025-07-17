@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Data selecionada:", selectedDate);
 
         const userId = localStorage.getItem('userId');
-        const animalId = document.getElementById('animal-select').value;
+        const animalId = document.getElementById('myanimal-select').value;
 
         const formData = {
             userId: userId,

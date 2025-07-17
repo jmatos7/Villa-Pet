@@ -718,6 +718,7 @@ h1 {
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color : #333;
 }
 
 .profile-info p {
@@ -735,38 +736,61 @@ h1 {
     font-size: 1.1em;
 }
 
-label {
+.add-animal-form label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
 }
-
-input[type="text"],
-input[type="email"],
-input[type="tel"] {
+.add-animal-form input,
+.add-animal-form select {   
     width: 100%;
-    padding: 8px 10px;
-    font-size: 1em;
+    max-width: 400px;
+    padding: 10px;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-top: 4px;
 }
 
-button {
-    margin-top: 15px;
-    background: #940000;
+.add-animal-form button {
+    background-color: #940000;
     color: white;
+    padding: 10px 15px;
     border: none;
-    padding: 10px 18px;
-    font-size: 1.1em;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
-button:hover {
-    background: #cc0000;
+#breed-suggestions {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 400px; /* ajusta ao tamanho do input */
+  display: none;
+  z-index: 1000;
 }
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #eee;
+}
+
+.breed-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
 
 @view-transition {
     navigation: auto;
@@ -901,16 +925,17 @@ button:hover {
   color: #fc3838;
 }
 
-form {
+.registerForm,
+.loginForm {
   display: none;
   flex-direction: column;
   gap: 24px;
 }
 
-form.active {
+.registerForm.active,
+.loginForm.active {
   display: flex;
 }
-
 /* Floating labels: container para cada input+label */
 .input-group {
   position: relative;
@@ -925,7 +950,7 @@ form.active {
   border: 2px solid transparent;
   outline: none;
   background-color: rgba(255, 255, 255, 0.1);
-  color: #eee;
+  color: #000000;
   transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
