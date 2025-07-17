@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-import {autenticar} from './auth.js';
+import { autenticar } from './auth.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // Middleware
 app.use(cors({
-  origin: ['http://127.0.0.1:8080','http://localhost:8080'],
+  origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
   credentials: true
 }));
 
@@ -85,18 +85,17 @@ app.post('/user', async (req, res) => {
 
 // Criar animal
 app.post('/animals', async (req, res) => {
-  const { userId, nome, tipo } = req.body;
-
-  if (!userId || !nome || !tipo) {
-    return res.status(400).json({ error: 'userId, nome e tipo são obrigatórios.' });
-  }
+  const { userId, nome, tipo, raca, sexo, idade } = req.body;
 
   try {
     const animal = await prisma.animal.create({
       data: {
         nome,
         tipo,
-        user: { connect: { id: userId } }
+        raca,
+        sexo,
+        idade,
+        dono: { connect: { id: userId } }
       }
     });
     res.status(201).json(animal);
@@ -179,16 +178,14 @@ app.post('/login', async (req, res) => {
   if (!valid) return res.status(401).json({ error: 'Credenciais inválidas' });
 
   const token = jwt.sign({ id: user.id, nome: user.nome }, process.env.JWT_SECRET, { expiresIn: '1d' });
-  console.log('Token gerado:', token);
   // Enviar token em cookie HttpOnly
   res.cookie('token', token, {
     httpOnly: true,
-    secure: false,       
-    sameSite: 'lax', 
-    maxAge: 24 * 60 * 60 * 1000// 1 dias
+    secure: false,
+    sameSite: 'lax',
   });
 
-  res.json({nome: user.nome, message: 'Login bem-sucedido' });
+  res.json({ nome: user.nome, message: 'Login bem-sucedido' });
 });
 
 app.post('/logout', async (req, res) => {
@@ -196,16 +193,28 @@ app.post('/logout', async (req, res) => {
   res.json({ message: 'Sessão terminada' });
 });
 
-app.get('/me', autenticar , async (req, res) => {
+app.get('/me', autenticar, async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
-    select: { id: true, nome: true, email: true, telefone: true }
+    select: {
+      id: true,
+      nome: true,
+      email: true,
+      telefone: true,
+      animais: {
+        select: { id: true, nome: true }
+      },
+      bookings: {
+        select:{ id :true}
+      }
+    }
   });
 
   if (!user) return res.status(404).json({ error: 'Utilizador não encontrado' });
 
-  res.json(user || {});
+  res.json(user);
 });
+
 
 
 // Listar todas as marcações com utilizador e animal
@@ -240,7 +249,7 @@ app.delete('/bookings/invalid', async (req, res) => {
 app.get('/users/:id/animals', async (req, res) => {
   try {
     const animals = await prisma.animal.findMany({
-      where: { userId: req.params.id }
+      where: { donoId: req.params.id }
     });
     res.json(animals);
   } catch (error) {

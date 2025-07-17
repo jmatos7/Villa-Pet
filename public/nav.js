@@ -1,5 +1,5 @@
 const container = document.querySelector('.menu-container');
-const menuButton = document.querySelector('.button');
+const menuButton = document.querySelector('.button-menu');
 const dropdownMenu = document.getElementById('dropdown-menu');
 
 // Mostrar o botão ao passar com o rato
@@ -68,7 +68,7 @@ async function verificarAutenticacao() {
             return true;
         } else if (res.status === 401) {
             console.warn("Utilizador não autenticado");
-            return null;
+            return false;
         } else {
             console.error("Erro inesperado:", res.status);
             return null;
@@ -79,7 +79,24 @@ async function verificarAutenticacao() {
     }
 }
 
+window.abrirModalLogin = function () {
+    const modal = document.getElementById('loginModal');
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
 
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+
+    loginTab.classList.add('active');
+    registerTab.classList.remove('active');
+    loginTab.setAttribute('aria-selected', 'true');
+    registerTab.setAttribute('aria-selected', 'false');
+    loginForm.classList.add('active');
+    registerForm.classList.remove('active');
+
+};
 
 window.addEventListener('DOMContentLoaded', async () => {
 
@@ -118,7 +135,15 @@ window.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             modal.style.display = 'flex';
             modal.setAttribute('aria-hidden', 'false');
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginTab.setAttribute('aria-selected', 'true');
+            registerTab.setAttribute('aria-selected', 'false');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
         });
+
+
 
         // Fechar modal no X
         closeModalBtn.addEventListener('click', () => {
@@ -253,11 +278,14 @@ loginForm.addEventListener('submit', async (e) => {
                 title: 'swal2-title-custom',
                 popup: 'swal2-popup-custom'
             }
-        });
+        }).then(() => {
 
+            window.location.reload();
+        });
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
         loginForm.reset();
+
         // Atualizar o ícone do perfil
         const profileIcon = document.getElementById('profile-icon');
         profileIcon.innerHTML = `
@@ -266,6 +294,7 @@ loginForm.addEventListener('submit', async (e) => {
         <span>Meu Perfil</span>
       </a>
     `;
+
 
     } catch (err) {
         console.error("Erro na requisição:", err);

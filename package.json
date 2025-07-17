@@ -20,7 +20,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "sweetalert2": "^11.22.2"
   },
   "devDependencies": {
     "concurrently": "^9.2.0",

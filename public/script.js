@@ -10,8 +10,59 @@ const serviceDurations = {
     'Estadia': 1440  // 24 horas = 1 dia inteira (exemplo)
 };
 
-document.addEventListener('DOMContentLoaded', function () {
+async function getCookie() {
+    try {
+        const res = await fetch('http://localhost:3000/me', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            } // necessário para enviar cookies
+        });
+        if (res.ok) {
+            const data = await res.json()
+            return data;
+        } else if (res.status === 401) {
+            console.warn("Utilizador não autenticado");
+            return null;
+        } else {
+            console.error("Erro inesperado:", res.status);
+            return null;
+        }
+    } catch (err) {
+        console.error("Erro na verificação de autenticação:", err);
+        return null;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendar');
+    const user = await getCookie();
+    const evento = new Event('abrirLoginModal');
+    document.dispatchEvent(evento);
+
+    const animalSelect = document.getElementById('myanimal-select');
+    if (!user || !user.animais) {
+        Swal.fire({
+            title: 'Atenção',
+            text: 'Por favor, faça o seu login.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            // Redirecionar para o login ou fechar modal, se fizer sentido
+            abrirModalLogin(); // ou abrir modal de login, se for SPA
+        });
+
+        return; // impede que o resto do código corra
+    }
+    // Supondo que já tens `user.animais`
+    user.animais.forEach(animal => {
+        const option = document.createElement('option');
+        option.value = animal.id;
+        option.textContent = animal.nome;
+        animalSelect.appendChild(option);
+    });
+
     let selectedTime = null;
     let selectedService = null;
 
@@ -19,6 +70,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const serviceSelect = document.getElementById('service-select');
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
+        eventDidMount: function (info) {
+            if (info.view.type === 'dayGridMonth') {
+                // Vista mês: texto maior, normal
+                info.el.style.fontSize = '12px';
+                info.el.style.padding = '4px 6px';
+                info.el.style.borderRadius = '6px';
+                info.el.style.height = 'auto';
+                info.el.style.whiteSpace = 'normal'; // permite quebra de linha
+            }
+            else if (info.view.type === 'timeGridWeek' || info.view.type === 'timeGridDay') {
+                // Vista semana/dia: texto menor, quebra linhas, padding confortável
+                info.el.style.fontSize = '10px';
+                info.el.style.padding = '6px 8px';
+                info.el.style.borderRadius = '8px';
+                info.el.style.width = '40%';
+                info.el.style.height = 'auto'; // altura automática para o conteúdo
+                info.el.style.whiteSpace = 'normal'; // importante para permitir quebra de linha
+                info.el.style.overflow = 'visible';  // para mostrar tudo
+                info.el.style.lineHeight = '1.2em';   // espaçamento entre linhas
+            }
+        },
         initialView: 'dayGridMonth',
         locale: 'pt',
         selectable: true,
@@ -129,13 +201,16 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         console.log("Data selecionada:", selectedDate);
+        const selectedAnimalId = animalSelect.value;
 
-        const userId = localStorage.getItem('userId');
-        const animalId = document.getElementById('myanimal-select').value;
+        if (!selectedAnimalId) {
+            Swal.fire('Atenção', 'Por favor, selecione um animal.', 'warning');
+            return;
+        }
 
         const formData = {
-            userId: userId,
-            animalId: animalId,
+            userId: user.id,
+            animalId: selectedAnimalId,
             data: selectedDate,
             hora: selectedTime,
             servico: selectedService,
@@ -210,15 +285,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 const duration = serviceDurations[servico] || 60;
                 const end = new Date(start.getTime() + duration * 60000);
 
+                const isUserBooking = booking.userId === user.id;
+
+                let title = '';
+                if (isUserBooking) {
+                    const animalNome = user.animais.find(a => a.id === booking.animalId)?.nome || 'Meu Animal';
+                    title = `${servico} - ${animalNome}`;
+                } else {
+                    title = `Ocupado - ${servico}`;
+                }
+
                 calendar.addEvent({
-                    title: `${booking.servico}`,
+                    title: title,
                     start: start,
                     end: end,
                     allDay: false,
                     color: getServiceColor(booking.servico), // Adiciona cor conforme o serviço
                     extendedProps: {
-                        details: booking // Guarda todos os detalhes
-                    }
+                        details: booking, isUserBooking // Guarda todos os detalhes
+                    },
+
                 });
             });
         })
@@ -238,4 +324,5 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         return colors[servico] || '#940000'; // Cor padrão se não encontrado
     }
+
 });

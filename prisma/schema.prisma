@@ -25,6 +25,7 @@ model Animal {
   tipo      String
   raca      String
   sexo      String
+  idade     Int
   donoId    String    @db.ObjectId
   dono      User      @relation(fields: [donoId], references: [id])
   bookings  Booking[]
