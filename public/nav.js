@@ -52,6 +52,56 @@ document.querySelectorAll('.dropdown-menu li a, .paw-button').forEach(link => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = await getUser();
+
+    if (user) {
+        if (user.role === 'ADMIN') {
+            addRoleOption('Painel Admin', './staff.html', 'settings-outline');
+        } else if (user.role === 'STAFF') {
+            addRoleOption('Painel Staff', './staff.html', 'construct-outline');
+        }
+    }
+});
+
+async function getUser() {
+    try {
+        const res = await fetch('http://localhost:3000/me', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (res.ok) {
+            return await res.json();
+        } else {
+            console.warn("Utilizador não autenticado ou erro:", res.status);
+            return null;
+        }
+    } catch (err) {
+        console.error("Erro na verificação do utilizador:", err);
+        return null;
+    }
+}
+
+function addRoleOption(texto, href, iconName) {
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const ul = dropdownMenu.querySelector('ul');
+
+    // Evita duplicar
+    if (!ul.querySelector(`.role-link`)) {
+        const li = document.createElement('li');
+        li.classList.add('role-link'); // uma classe comum para evitar duplicação
+        li.innerHTML = `
+            <a href="${href}">
+                <ion-icon name="${iconName}"></ion-icon>${texto}
+            </a>`;
+        ul.appendChild(li);
+    }
+}
+
+
 async function verificarAutenticacao() {
     try {
         const res = await fetch('http://localhost:3000/me', {

@@ -7,11 +7,10 @@
     <title>Villa Pet</title>
     <link rel="icon" type="image/png" sizes="16x16"
         href="./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png">
-    <link rel="stylesheet" href="./style.css">
-    <script src="./perfil.js" defer></script>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/staff.js" defer></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
 <body>
@@ -23,6 +22,7 @@
                 </div>
                 <span>Menu</span>
             </a>
+
 
             <!-- Menu lateral -->
             <div id="dropdown-menu" class="dropdown-menu">
@@ -45,50 +45,44 @@
     </nav>
 
     <main>
-        <h1>Meu Perfil</h1>
+        <section class="search-section">
+            <label for="procura-dia" class="search-label">Procurar horários por dia:</label>
+            <input type="date" id="procura-dia" name="procura-dia" class="search-input"
+                aria-describedby="search-info" />
+            <small id="search-info" class="search-info">
+                Selecione um dia para ver os horários disponíveis.
+            </small>
+        </section>
 
-        <div class="profile-info">
-            <p><strong>Nome:</strong> <span id="nome"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
-            <p><strong>Número:</strong> <span id="numero"></span></p>
-        </div>
+        <section class="schedule-section">
+            <h2>Horário</h2>
+            <div class="schedule-container">
+
+                <!-- Lado esquerdo: horários -->
+                <div class="horarios">
+                    <ul class="lista-horarios-do-dia"></ul>
+                </div>
+
+                <!-- Lado direito: detalhes da marcação -->
+                <div class="detalhes-marcacao" id="detalhes-marcacao">
+                    <p>Seleciona uma hora com marcação para ver os detalhes aqui.</p>
+                </div>
+
+            </div>
+        </section>
 
 
-        <div class="animal-list">
-            <h2>Animais</h2>
-            <ul id="animal-ul">
-                <!-- Animais vão aparecer aqui -->
-            </ul>
-        </div>
 
-        <div class="add-animal-form">
-            <h2>Adicionar Animal</h2>
-            <form id="animal-form">
-                <label for="animal-name">Nome do Animal</label>
-                <input type="text" id="animal-name" placeholder="Nome do seu animal" required />
-                <label for="tipo-animal">Tipo de Animal:</label>
-                <select id="tipo-animal" required>
-                    <option value="cao">Cão</option>
-                    <option value="gato">Gato</option>
-                </select>
-                <label for="animal-race">Raça</label>
-                <input type="text" id="animal-race" placeholder="Raça" autocomplete="off" required />
-                <div id="breed-suggestions"></div>
+        <section id="staff-list-section" class="staff-list-section">
+            <h2>Lista de Utilizadores</h2>
+            <input type="text" class="search-user" name="procura pessoas" id="search-user"
+                placeholder="Procurar por nome, número ou email">
+            <div class="staff-list-container">
+                <!-- Cada user vai aqui -->
+                <!-- Aqui o JS pode inserir mais cards dinamicamente -->
 
-                <label for="sexo">Sexo:</label>
-                <select id="sexo" required>
-                    <option value="macho">Macho</option>
-                    <option value="fêmea">Fêmea</option>
-                </select>
-                <label for="animal-age">Idade do animal</label>
-                <input type="number" id="animal-age" placeholder="Idade do seu animal" />
-                <button type="submit" id="submit-animais">Adicionar</button>
-            </form>
-        </div>
-
-        <div class="button-logout" id="button-logout">
-            <button id="logout" class="logout">Logout</button>
-        </div>
+            </div>
+        </section>
 
     </main>
 
