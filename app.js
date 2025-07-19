@@ -6,10 +6,11 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-import { autenticar,authenticateToken } from './auth.js';
+import { autenticar, authenticateToken } from './auth.js';
 import { isAdmin, hasRole } from './isAdmin.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cron from 'node-cron';
 
 // __filename (caminho do ficheiro atual)
 const __filename = fileURLToPath(import.meta.url);
@@ -35,7 +36,27 @@ app.use(cors({
   credentials: true
 }));
 
+async function limpaBookingsAntigos() {
+  const hoje = new Date();
+  const dataHoje = hoje.toISOString().slice(0, 10);
+  try {
+    const resultado = await prisma.booking.deleteMany({
+      where: { data: { lt: dataHoje } }
+    });
+    console.log(`Limpeza automática: apagadas ${resultado.count} marcações antigas.`);
+  } catch (e) {
+    console.error('Erro na limpeza automática:', e);
+  }
+}
 
+// Executa limpeza imediatamente ao arrancar o servidor
+limpaBookingsAntigos();
+
+// Agenda limpeza diária todo dia à meia-noite
+cron.schedule('0 0 * * *', () => {
+  limpaBookingsAntigos();
+  console.log('Rotina diária de limpeza executada à meia-noite.');
+});
 // Duração dos serviços
 const serviceDurations = {
   'Banho': 60,
@@ -104,20 +125,20 @@ app.get('/admin', autenticar, hasRole('ADMIN', 'STAFF'), (req, res) => {
   res.send('Bem-vindo, staff!');
 });
 
-app.patch('/user/:id',async (req, res) =>{
+app.patch('/user/:id', async (req, res) => {
 
   const userId = req.params.id;
-  const {role,staffLevel} = req.body;
+  const { role, staffLevel } = req.body;
 
   try {
     const updateUser = await prisma.user.update({
-      where:{id:userId},
-      data:{
+      where: { id: userId },
+      data: {
         role: role !== undefined ? role : undefined,
         staffLevel: staffLevel !== undefined ? staffLevel : undefined,
       }
     })
-    
+
     res.json(updateUser);
   } catch (error) {
     console.error('Erro ao atualizar utilizador:', error);
@@ -289,6 +310,7 @@ app.get('/me', autenticar, async (req, res) => {
       email: true,
       telefone: true,
       role: true,
+      staffLevel: true,
       animais: {
         select: { id: true, nome: true }
       },
@@ -319,6 +341,33 @@ app.get('/bookings', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get('/bookings', async (req, res) => {
+  const hoje = new Date();
+  const dataHoje = hoje.toISOString().slice(0, 10); // "2025-07-19"
+
+  try {
+    // Apaga marcações com data anterior a hoje
+    const resultado = await prisma.booking.deleteMany({
+      where: {
+        data: {
+          lt: dataHoje // todas as datas menores que hoje
+        }
+      }
+    });
+
+    console.log(`Apaguei ${resultado.count} marcações com data anterior a ${dataHoje}`);
+
+    // Busca as marcações restantes
+    const bookings = await prisma.booking.findMany();
+    res.json(bookings);
+
+  } catch (error) {
+    console.error('Erro ao apagar marcações antigas:', error);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 
 app.delete('/users/:id', async (req, res) => {
   try {

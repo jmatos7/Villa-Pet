@@ -223,10 +223,6 @@ function mostrarDetalhesMarcacao(reservas) {
     painelDetalhes.innerHTML = html;
 }
 
-
-
-
-
 function formatHora(hora, min) {
     // Ajusta minutos e horas para o fim do slot (ex: 8:30, 9:00)
     if (min === 60) {
@@ -275,15 +271,44 @@ document.addEventListener('DOMContentLoaded', () => {
         renderUsers(users); // usa a função correta
     }
 
+    async function getUser() {
+        try {
+            const res = await fetch('http://localhost:3000/me', {
+                method: 'GET',
+                credentials: 'include', // Isto é importante se usares cookies HttpOnly
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!res.ok) {
+                throw new Error('Falha ao obter utilizador');
+            }
+
+            const currentUser = await res.json();
+            return currentUser;
+
+        } catch (error) {
+            console.error('Erro ao obter utilizador:', error);
+            return null;
+        }
+    }
+
+
+
+
     // Função para renderizar os utilizadores
-    function renderUsers(users) {
+    async function renderUsers(users) {
+
+        const currentUser = await getUser();
+        console.log('Current user:', currentUser); // Verifica se está definido
+
         staffContainer.innerHTML = '';
         users.forEach(user => {
             const card = document.createElement('div');
             card.classList.add('staff-card');
             card.setAttribute('data-user-id', user.id);
 
-            // Conteúdo básico (sempre visível)
             let innerHTML = `
             <p><strong>Nome:</strong> ${user.nome}</p>
             <p><strong>Email:</strong> ${user.email}</p>
@@ -292,8 +317,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <p><strong>Cargo:</strong> <span class="user-role">${user.staffLevel || user.role}</span></p>
         `;
 
-            // Se NÃO for ADMIN nem BOSS, adiciona os botões
-            if (user.role !== 'ADMIN' && user.staffLevel !== 'BOSS') {
+            const isCurrentUserAdminOrBoss = currentUser && (currentUser.role === 'ADMIN' || currentUser.staffLevel === 'BOSS');
+            const isTargetUserAdminOrBoss = user.role === 'ADMIN' || user.staffLevel === 'BOSS';
+
+            if (isCurrentUserAdminOrBoss && !isTargetUserAdminOrBoss) {
                 innerHTML += `
                 <div class="staff-card-actions">
                     <button class="btn btn-delete">Eliminar</button>
@@ -304,8 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.innerHTML = innerHTML;
 
-            // Só adiciona eventos se os botões existirem
-            if (user.role !== 'ADMIN' && user.staffLevel !== 'BOSS') {
+            if (isCurrentUserAdminOrBoss && !isTargetUserAdminOrBoss) {
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteUser(user.id));
                 card.querySelector('.btn-change-role').addEventListener('click', () => changeUserRole(user));
             }
@@ -313,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
             staffContainer.appendChild(card);
         });
     }
+
 
 
 

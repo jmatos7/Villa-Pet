@@ -56,10 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const user = await getUser();
 
     if (user) {
-        if (user.role === 'ADMIN') {
+        if (user.role === 'ADMIN' || user.role === 'STAFF' ) {
             addRoleOption('Painel Admin', './staff.html', 'settings-outline');
-        } else if (user.role === 'STAFF') {
-            addRoleOption('Painel Staff', './staff.html', 'construct-outline');
         }
     }
 });
