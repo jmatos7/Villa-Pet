@@ -38,24 +38,23 @@ async function getCookie() {
 document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendar');
     const user = await getCookie();
-    const evento = new Event('abrirLoginModal');
-    document.dispatchEvent(evento);
 
     const animalSelect = document.getElementById('myanimal-select');
+    const serviceSelect = document.getElementById('service-select');
+    const timeList = document.getElementById('time-list'); // Lista UL onde vais mostrar os horários
+    let selectedDate = null;
+    let selectedTime = null;
+
     if (!user || !user.animais) {
         Swal.fire({
             title: 'Atenção',
             text: 'Por favor, faça o seu login.',
             icon: 'warning',
             confirmButtonText: 'OK'
-        }).then(() => {
-            // Redirecionar para o login ou fechar modal, se fizer sentido
-            abrirModalLogin(); // ou abrir modal de login, se for SPA
-        });
-
-        return; // impede que o resto do código corra
+        }).then(() => abrirModalLogin());
+        return;
     }
-    // Supondo que já tens `user.animais`
+
     user.animais.forEach(animal => {
         const option = document.createElement('option');
         option.value = animal.id;
@@ -63,148 +62,150 @@ document.addEventListener('DOMContentLoaded', async function () {
         animalSelect.appendChild(option);
     });
 
-    let selectedTime = null;
-    let selectedService = null;
+    async function getBookings() {
+        const user = await getCookie();
+        console.log("Utilizador atual:", user);
+        try {
+            const res = await fetch(`http://localhost:3000/users/${user.id}/bookings`, {
+                method: 'GET',
+            });
+            if (!res.ok) throw new Error('Erro ao buscar marcações');
+            return await res.json();
+        } catch (error) {
+            console.error('Erro ao obter bookings:', error);
+            return [];
+        }
+    }
 
-    const selectedDateElement = document.getElementById('selected-date');
-    const serviceSelect = document.getElementById('service-select');
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        eventDidMount: function (info) {
-            if (info.view.type === 'dayGridMonth') {
-                // Vista mês: texto maior, normal
-                info.el.style.fontSize = '12px';
-                info.el.style.padding = '4px 6px';
-                info.el.style.borderRadius = '6px';
-                info.el.style.height = 'auto';
-                info.el.style.whiteSpace = 'normal'; // permite quebra de linha
+    async function inicializarCalendario() {
+        const calendarEl = document.getElementById('calendar');
+        const bookings = await getBookings();
+
+        // Transformar marcações para eventos do FullCalendar
+        const eventos = bookings.map(b => ({
+            title: '', // vazio porque vamos personalizar manualmente
+            start: `${b.data}T${b.hora}`,
+            allDay: false,
+            extendedProps: {
+                servico: b.servico,
+                animal: b.animal.nome
             }
-            else if (info.view.type === 'timeGridWeek' || info.view.type === 'timeGridDay') {
-                // Vista semana/dia: texto menor, quebra linhas, padding confortável
-                info.el.style.fontSize = '10px';
-                info.el.style.padding = '6px 8px';
-                info.el.style.borderRadius = '8px';
-                info.el.style.width = '40%';
-                info.el.style.height = 'auto'; // altura automática para o conteúdo
-                info.el.style.whiteSpace = 'normal'; // importante para permitir quebra de linha
-                info.el.style.overflow = 'visible';  // para mostrar tudo
-                info.el.style.lineHeight = '1.2em';   // espaçamento entre linhas
-            }
-        },
-        initialView: 'dayGridMonth',
-        locale: 'pt',
-        selectable: true,
-        selectMirror: true,
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        slotMinTime: '08:00:00',  // Começa às 9h
-        slotMaxTime: '20:00:00',  // Termina às 17h
-        businessHours: {          // Destacar horário comercial
-            daysOfWeek: [1, 2, 3, 4, 5], // Segunda a sexta
-            startTime: '08:00',   // Começa às 9h
-            endTime: '20:00'      // Termina às 17h
-        },
-        validRange: {
-            start: new Date().toISOString().split('T')[0] // restringe a data mínima para hoje
-        },
-        dateClick: function (info) {
-            selectedDate = info.dateStr;
-            calendar.gotoDate(info.date);
-            calendar.changeView('timeGridDay');
+        }));
 
-            const horarioISO = `${selectedDate}T${toString().padStart(2, '0')}:00`;
-            const horaFormatada = horarioISO.split('T')[1].substring(0, 5);
 
-            const eventos = calendar.getEvents();
-            const ocupado = eventos.some(evento =>
-                evento.startStr === horaFormatada ||
-                (evento.start && evento.start.toISOString().startsWith(horarioISO)
-                ));
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'pt',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            selectable: false,
+            validRange: {
+                start: new Date().toISOString().split('T')[0]
+            },
+            events: eventos,
+            eventDidMount: function (info) {
+                const { servico, animal } = info.event.extendedProps;
+                info.el.innerHTML = `<div><strong>${servico}</strong><br><span style="font-size: 0.9em;">${animal}</span></div>`;
+            },
+            dateClick: function (info) {
+                const hoje = new Date();
+                const dataClicada = new Date(info.dateStr);
+                const diaSemana = dataClicada.getDay();
 
-            if (!ocupado) {
-
-                textContent = horaFormatada;
-                horario = horarioISO;
-
-                // Remove seleção anterior
-                document.querySelectorAll('#time-list li.selected').forEach(item => {
-                    item.classList.remove('selected');
-                });
-
-                // Adiciona seleção
-                selectedTime = horaFormatada;
-                console.log(selectedTime);
-                selectedService = serviceSelect.value;
-
-                if (!selectedService) {
-                    Swal.fire('Atenção', 'Por favor, selecione um serviço primeiro.', 'warning');
+                if (dataClicada < hoje.setHours(0, 0, 0, 0)) {
+                    Swal.fire('Data inválida', 'Não é possível marcar para dias anteriores.', 'warning');
                     return;
                 }
 
-            }
-        },
-        select: function (info) {
-            if (!info.start || !info.end) {
-                Swal.fire('Atenção', 'Por favor, selecione um horário válido.', 'warning');
-                return;
-            }
-            const start = info.start;
-            console.log("Data selecionada:", start);
-            const horaFormatada = start.toISOString().split('T')[1].substring(0, 5);
-            selectedDate = start.toISOString().split('T')[0];
-            selectedTime = horaFormatada;
-            selectedService = serviceSelect.value;
-
-            if (!selectedService) {
-                Swal.fire('Atenção', 'Por favor, selecione um serviço primeiro.', 'warning');
-                return;
-            }
-
-            document.getElementById('booking-form').style.display = 'block';
-
-            // Remover fundo anterior, se houver
-            calendar.getEvents().forEach(e => {
-                if (e.extendedProps && e.extendedProps.temporaryHighlight) {
-                    e.remove();
+                if (diaSemana === 0) {
+                    Swal.fire('Domingo indisponível', 'Não é possível marcar aos domingos.', 'info');
+                    return;
                 }
-            });
 
-            const durationMinutes = serviceSelect.value
-                ? serviceDurations[selectedService]
-                : 60; // valor padrão 60 minutos (1 hora) se não tiver seleção
+                selectedDate = info.dateStr;
+                mostrarHorariosDisponiveis(selectedDate);
+            }
+        });
 
-            const durationHours = durationMinutes / 60;
+        calendar.render();
+    }
 
-            const endTime = new Date(start);
-            endTime.setHours(endTime.getHours() + durationHours);
+    inicializarCalendario();
 
-            endTime.setMinutes(endTime.getMinutes() + (serviceDurations[selectedService] % 60));
-            // Adicionar um "evento de fundo" para destacar o slot
-            calendar.addEvent({
-                start: info.start,
-                end: endTime,
-                display: 'background',
-                color: '#FFD700', // Amarelo ouro
-                temporaryHighlight: true
-            });
-        },
+    async function mostrarHorariosDisponiveis(dataSelecionada) {
+        const timeList = document.getElementById('time-list');
+        timeList.innerHTML = '';
 
-        dayMaxEvents: true
-    });
+        function gerarHorarios(intervaloMinutos = 30, inicio = '08:00', fim = '17:00') {
+            const horarios = [];
+            let [hora, minuto] = inicio.split(':').map(Number);
+            const [horaFim, minutoFim] = fim.split(':').map(Number);
 
-    calendar.render();
+            while (hora < horaFim || (hora === horaFim && minuto <= minutoFim)) {
+                const h = String(hora).padStart(2, '0');
+                const m = String(minuto).padStart(2, '0');
+                horarios.push(`${h}:${m}`);
+
+                minuto += intervaloMinutos;
+                if (minuto >= 60) {
+                    minuto -= 60;
+                    hora += 1;
+                }
+            }
+            return horarios;
+        }
+
+
+        // Obter marcações existentes
+        const response = await fetch('http://localhost:3000/bookings');
+        const bookings = await response.json();
+
+        // Filtrar marcações do dia
+        const ocupados = bookings
+            .filter(b => b.data === dataSelecionada)
+            .map(b => b.hora);
+
+        // Horários disponíveis no dia
+        const horariosPossiveis = gerarHorarios(30, '08:00', '20:00');
+
+
+        horariosPossiveis.forEach(hora => {
+            const li = document.createElement('li');
+            li.classList.add('horario-item');
+            li.innerHTML = `<strong>${hora}</strong>`;
+
+            if (ocupados.includes(hora)) {
+                li.classList.add('ocupado');
+                li.innerHTML += `<span class="estado">Ocupado</span>`;
+            } else {
+                li.classList.add('disponivel');
+                li.innerHTML += `<span class="estado">Disponível</span>`;
+                li.addEventListener('click', () => {
+                    selectedTime = hora;
+                    document.querySelectorAll('#time-list li').forEach(e => e.classList.remove('selected'));
+                    li.classList.add('selected');
+                });
+            }
+
+            timeList.appendChild(li);
+        });
+
+        document.getElementById('booking-form').style.display = 'block';
+    }
+
 
     document.getElementById('booking-form').addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        console.log("Data selecionada:", selectedDate);
         const selectedAnimalId = animalSelect.value;
+        const selectedService = serviceSelect.value;
 
-        if (!selectedAnimalId) {
-            Swal.fire('Atenção', 'Por favor, selecione um animal.', 'warning');
+        if (!selectedAnimalId || !selectedTime || !selectedDate || !selectedService) {
+            Swal.fire('Atenção', 'Preencha todos os campos.', 'warning');
             return;
         }
 
@@ -217,15 +218,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         };
 
         try {
-            if (!selectedDate || !selectedTime || !selectedService) {
-                Swal.fire('Atenção', 'Por favor, selecione data, hora e serviço.', 'warning');
-                return;
-            }
             const response = await fetch('http://localhost:3000/bookings', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
 
@@ -235,94 +230,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 return;
             }
 
-            const booking = await response.json();
-            const data = booking.data;
-            const hora = booking.hora;
-            const servico = booking.servico;
-
-            const start = new Date(`${data}T${hora}:00`);
-            const duration = serviceDurations[servico] || 60;
-            const end = new Date(start.getTime() + duration * 60000);
-
-            calendar.addEvent({
-                title: booking.servico,
-                start: start,
-                end: end,
-                allDay: false,
-                color: getServiceColor(booking.servico)
-            });
-
-
-            Swal.fire({
-                title: 'Sucesso!',
-                text: 'Sua marcação foi registada.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-
+            Swal.fire('Sucesso!', 'Sua marcação foi registada.', 'success');
             event.target.reset();
             document.getElementById('booking-form').style.display = 'none';
-
-        } catch (error) {
-            console.error(error);
-            console.log(error.message);
-            Swal.fire('Erro!', error.message || 'Não foi possível guardar a marcação.', 'error');
+        } catch (err) {
+            console.error(err);
+            Swal.fire('Erro', 'Falha na marcação.', 'error');
         }
     });
-
-    fetch('http://localhost:3000/bookings')
-        .then(res => {
-            if (!res.ok) throw new Error('Erro ao carregar marcações');
-            return res.json();
-        })
-        .then(bookings => {
-            bookings.forEach(booking => {
-                const data = booking.data;
-                const hora = booking.hora;
-                const servico = booking.servico;
-
-                const start = new Date(`${data}T${hora}:00`);
-                const duration = serviceDurations[servico] || 60;
-                const end = new Date(start.getTime() + duration * 60000);
-
-                const isUserBooking = booking.userId === user.id;
-
-                let title = '';
-                if (isUserBooking) {
-                    const animalNome = user.animais.find(a => a.id === booking.animalId)?.nome || 'Meu Animal';
-                    title = `${servico} - ${animalNome}`;
-                } else {
-                    title = `Ocupado - ${servico}`;
-                }
-
-                calendar.addEvent({
-                    title: title,
-                    start: start,
-                    end: end,
-                    allDay: false,
-                    color: getServiceColor(booking.servico), // Adiciona cor conforme o serviço
-                    extendedProps: {
-                        details: booking, isUserBooking // Guarda todos os detalhes
-                    },
-
-                });
-            });
-        })
-        .catch(err => {
-            console.error('Erro:', err);
-            Swal.fire('Erro', 'Não foi possível carregar as marcações', 'error');
-        });
-
-    function getServiceColor(servico) {
-        const colors = {
-            'Banho': '#FF5733',
-            'Creche': '#33FF57',
-            'Treino': '#3357FF',
-            'Tosquia': '#F033FF',
-            'Spa': '#33FFF3',
-            'Estadia': '#FF33F5'
-        };
-        return colors[servico] || '#940000'; // Cor padrão se não encontrado
-    }
-
 });
+

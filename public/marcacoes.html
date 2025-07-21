@@ -53,28 +53,28 @@
         <section class="marcacoes">
             <h2>Faça uma Marcação</h2>
 
-            <!-- Seleção de serviços -->
-            <label for="service-select">Selecione um Serviço:</label>
-            <select id="service-select" required>
-                <option value="">-- Escolha um serviço --</option>
-                <option value="Banho">Banho</option>
-                <option value="Creche">Creche</option>
-                <option value="Treino">Treino</option>
-                <option value="Tosquia">Tosquia</option>
-                <option value="Spa">Spa</option>
-                <option value="Estadia">Estadia</option>
-            </select>
-
             <div id="calendar"></div>
-            <form id="booking-form" style="display: none;">
-                <label for="myanimal-select">Selecione o Animal:</label>
-                <select id="myanimal-select" required>
-                    <option value="">-- Escolha um animal --</option>
-                    <!-- As opções serão preenchidas dinamicamente -->  
+            <form id="booking-form" style="display:none;">
+                <select id="myanimal-select">
+                    <option value="">-- Escolha o seu animal --</option>
                 </select>
 
-                <button type="submit">Marcar</button>
+                <select id="service-select">
+                    <option value="">-- Escolha um serviço --</option>
+                    <option value="Banho">Banho</option>
+                    <option value="Creche">Creche</option>
+                    <option value="Treino">Treino</option>
+                    <option value="Tosquia">Tosquia</option>
+                    <option value="Spa">Spa</option>
+                    <option value="Estadia">Estadia</option>
+
+                </select>
+                <div id="time-list-container">
+                    <ul id="time-list"></ul>
+                </div>
+                <button type="submit" id="submit-booking">Marcar</button>
             </form>
+
         </section>
     </main>
     <footer>

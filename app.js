@@ -238,7 +238,6 @@ app.post('/bookings', async (req, res) => {
         data,
         hora,
         servico,
-        status: 'pendente',
         user: { connect: { id: userId } },
         animal: { connect: { id: animalId } }
       }

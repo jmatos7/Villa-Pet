@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -51,7 +50,6 @@ model Booking {
   data       String
   hora       String
   servico    String
-  status     String?
 
   userId     String   @db.ObjectId
   user       User     @relation(fields: [userId], references: [id])
