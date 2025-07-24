@@ -109,6 +109,7 @@
             <p>&copy; 2024 Villa Pet. Todos os direitos reservados.</p>
         </div>
     </footer>
+
     <div id="loginModal" class="modal" aria-hidden="true" aria-labelledby="modalTitle" role="dialog">
         <div class="modal-content">
             <span id="closeModal" class="close" aria-label="Fechar">&times;</span>
@@ -129,7 +130,10 @@
                     <input type="password" id="loginPassword" name="loginPassword" required
                         autocomplete="current-password" placeholder=" " />
                     <label for="loginPassword">Password</label>
+                    <button type="button" class="toggle-password"
+                        onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
                 </div>
+
                 <button type="submit" class="button-submit">Entrar</button>
             </form>
 
@@ -149,6 +153,13 @@
                 <div class="input-group">
                     <input type="password" id="registerPassword" name="registerPassword" required placeholder=" " />
                     <label for="registerPassword">Password</label>
+                    <button type="button" class="toggle-password"
+                        onclick="togglePasswordVisibility('registerPassword', this)">👁️</button>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" id="registerPhone" name="registerphone" required placeholder=" " />
+                    <label for="registerPhone">Telefone</label>
                 </div>
                 <button type="submit" class="button-submit">Registar</button>
             </form>

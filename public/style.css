@@ -1073,6 +1073,23 @@ h1 {
     gap: 10px;
     margin-bottom: 25px;
 }
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #555;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    color: #fc3838;
+}
+
 
 .tabs button {
     flex: 1;
@@ -1428,4 +1445,74 @@ h1 {
 #search-user:focus {
     border-color: #4a90e2;
     box-shadow: 0 0 8px rgba(74, 144, 226, 0.6);
+}
+
+/* Melhorias adicionais de responsividade */
+
+/* Tipografia adaptativa */
+html {
+  font-size: 100%;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 85%;
+  }
+}
+
+/* Ajustes para imagens e formulários */
+img,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+form {
+  width: 100%;
+}
+
+/* Ajustes no menu e navegação */
+@media (max-width: 768px) {
+  .button-menu {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    margin: 0;
+    z-index: 999;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    left: 0;
+    border-radius: 0;
+  }
+}
+
+/* Slider 100% */
+@media (max-width: 768px) {
+  .slider {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Grid de serviços mais flexível */
+.servicos-destaque {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* Ajuste da logo em telas pequenas */
+@media (max-width: 600px) {
+  .logo {
+    position: static;
+    transform: none;
+    margin: 10px auto;
+    display: block;
+  }
 }

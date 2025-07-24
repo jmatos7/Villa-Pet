@@ -62,6 +62,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+function togglePasswordVisibility(inputId, toggleBtn) {
+    const input = document.getElementById(inputId);
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    toggleBtn.textContent = isPassword ? "🙈" : "👁️";
+}
+
+
+
 async function getUser() {
     try {
         const res = await fetch('http://localhost:3000/me', {
@@ -90,7 +99,7 @@ function addRoleOption(texto, href, iconName) {
     // Evita duplicar
     if (!ul.querySelector(`.role-link`)) {
         const li = document.createElement('li');
-        li.classList.add('role-link'); // uma classe comum para evitar duplicação
+        li.classList.add('role-link'); 
         li.innerHTML = `
             <a href="${href}">
                 <ion-icon name="${iconName}"></ion-icon>${texto}

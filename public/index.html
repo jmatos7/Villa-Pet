@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Villa Pet</title>
+    <meta name="description" content="O Villa Pet é um hotel de luxo para animais no Porto. Oferecemos estadia, banho, creche e spa para o seu melhor amigo com carinho e segurança.">
+    <title>Villa Pet - Hotel de Luxo para Animais no Porto</title>
+    <meta name="keywords" content="hotel para animais, creche canina, creche felina, estadia para cães, banho e tosquia, spa pet, Porto">
     <link rel="icon" type="image/png" sizes="16x16"
         href="./img/bc7d5d5a-d61e-4540-bd0c-8e391be445f0-removebg-preview.png">
     <link rel="stylesheet" href="./style.css">
@@ -48,15 +50,15 @@
     <main>
         <div class="slider">
             <div class="image-container">
-                <img src="./img/animais/BA - Clinvet - 26 (1).jpg" class="active">
-                <img src="./img/animais/PE - Funpets-00023.jpg">
-                <img src="./img/animais/treino.jpg">
-                <img src="./img/animais/tosquia.jpg">
-                <img src="./img/animais/estadia.jpg">
-                <img src="./img/animais/crechefelina.jpg">
-                <img src="./img/animais/banho.jpg">
-                <img src="./img/animais/crechecanina.jpg">
-                <img src="./img/animais/spa.jpg">
+                <img src="./img/animais/BA - Clinvet - 26 (1).jpg" class="active" alt="Banho para cães no Villa Pet">
+                <img src="./img/animais/PE - Funpets-00023.jpg" alt="tosquia para cães no Villa Pet">
+                <img src="./img/animais/treino.jpg" alt="Banho para gatos no Villa Pet">
+                <img src="./img/animais/tosquia.jpg" alt="tosquia para gatos no Villa Pet">
+                <img src="./img/animais/estadia.jpg" alt="treino para cães no Villa Pet">
+                <img src="./img/animais/crechefelina.jpg" alt="estadia para cães no Villa Pet">
+                <img src="./img/animais/banho.jpg" alt="creche para cães no Villa Pet">
+                <img src="./img/animais/crechecanina.jpg" alt="creche para gatos no Villa Pet">
+                <img src="./img/animais/spa.jpg" alt="spa no Villa Pet">
 
                 <div class="overlay">
                     <h2>Bem-vindo ao Villa Pet!</h2>
@@ -215,7 +217,10 @@
                     <input type="password" id="loginPassword" name="loginPassword" required
                         autocomplete="current-password" placeholder=" " />
                     <label for="loginPassword">Password</label>
+                    <button type="button" class="toggle-password"
+                        onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
                 </div>
+
                 <button type="submit" class="button-submit">Entrar</button>
             </form>
 
@@ -235,7 +240,10 @@
                 <div class="input-group">
                     <input type="password" id="registerPassword" name="registerPassword" required placeholder=" " />
                     <label for="registerPassword">Password</label>
+                    <button type="button" class="toggle-password"
+                        onclick="togglePasswordVisibility('registerPassword', this)">👁️</button>
                 </div>
+
                 <div class="input-group">
                     <input type="number" id="registerPhone" name="registerphone" required placeholder=" " />
                     <label for="registerPhone">Telefone</label>
@@ -245,5 +253,20 @@
         </div>
     </div>
 </body>
-
+<!-- Schema.org: Informações estruturadas para o Villa Pet -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "PetStore",
+  "name": "Villa Pet",
+  "image": "https://villapet.com/img/VillaPetLogo.png",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Porto",
+    "addressCountry": "PT"
+  },
+  "telephone": "+351912345678",
+  "url": "https://villapet.com"
+}
+</script>
 </html>
